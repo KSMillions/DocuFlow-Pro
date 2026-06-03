@@ -28,9 +28,9 @@ Built using **HTML5**, **Vanilla CSS**, and **pure ES6 Javascript**, DocuFlow Pr
 ### Local Setup
 Since DocuFlow Pro is a serverless application, you can run it directly:
 
-1. **Open File**: Double-click `docuflow-pro-dashboard.html` in any modern web browser.
+1. **Open File**: Double-click `index.html` in any modern web browser.
 2. **Serve Locally**: Start a quick server inside the root directory to support all asset features:
    ```bash
    python3 -m http.server 8000
    ```
-   Then open [http://localhost:8000/docuflow-pro-dashboard.html](http://localhost:8000/docuflow-pro-dashboard.html) in your browser.
+   Then open [http://localhost:8000/index.html](http://localhost:8000/index.html) in your browser.

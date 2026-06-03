@@ -10,7 +10,8 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
   --bg:#0E0E10;--bg2:#161618;--bg3:#1E1E22;--bg4:#252529;
-  --gold:#C9A84C;--gold2:#E8C470;--gold3:#F5D98A;
+  --pink:#FFB6C1;--pink2:#FFC0CB;--pink3:#FFE4E1;
+  --accent:#FFFFFF;
   --text:#F0EDE6;--text2:#A8A49C;--text3:#6B6760;
   --border:#2A2A2E;--border2:#353539;
   --red:#E8574A;--green:#4ABFA8;--blue:#5B8FD4;--orange:#E89A4A;
@@ -20,18 +21,18 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
 
 /* TOAST NOTIFICATIONS */
 .toast-container{position:fixed;bottom:20px;right:20px;z-index:999;display:flex;flex-direction:column;gap:8px;}
-.toast{background:var(--bg2);border:1px solid var(--border);border-left:4px solid var(--gold);color:var(--text);padding:12px 18px;border-radius:8px;font-size:13px;display:flex;align-items:center;gap:10px;box-shadow:0 8px 24px rgba(0,0,0,0.5);transform:translateX(120%);transition:transform .3s cubic-bezier(0.16, 1, 0.3, 1), opacity .3s;opacity:0;}
+.toast{background:var(--bg2);border:1px solid var(--border);border-left:4px solid var(--pink);color:var(--text);padding:12px 18px;border-radius:8px;font-size:13px;display:flex;align-items:center;gap:10px;box-shadow:0 8px 24px rgba(0,0,0,0.5);transform:translateX(120%);transition:transform .3s cubic-bezier(0.16, 1, 0.3, 1), opacity .3s;opacity:0;}
 .toast.show{transform:translateX(0);opacity:1;}
 .toast-success{border-left-color:var(--green);}
 .toast-error{border-left-color:var(--red);}
 .toast-info{border-left-color:var(--blue);}
 
 /* ONBOARDING / SETUP */
-.onboarding-screen{position:fixed;inset:0;background:radial-gradient(circle at top, #1E1A12 0%, #0E0E10 80%);z-index:900;display:flex;align-items:center;justify-content:center;overflow-y:auto;padding:40px 20px;}
+.onboarding-screen{position:fixed;inset:0;background:radial-gradient(circle at top, #1A1515 0%, #0E0E10 80%);z-index:900;display:flex;align-items:center;justify-content:center;overflow-y:auto;padding:40px 20px;}
 .onboarding-card{background:rgba(22,22,24,0.7);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:32px;width:560px;max-width:100%;box-shadow:0 15px 40px rgba(0,0,0,0.6);animation:slideUp .5s ease;}
 .onboarding-header{text-align:center;margin-bottom:28px;}
 .onboarding-logo{width:42px;height:42px;object-fit:contain;margin-bottom:12px;}
-.onboarding-title{font-family:'DM Serif Display',serif;font-size:24px;color:var(--gold2);margin-bottom:6px;}
+.onboarding-title{font-family:'DM Serif Display',serif;font-size:24px;color:var(--pink3);margin-bottom:6px;}
 .onboarding-subtitle{font-size:13px;color:var(--text2);line-height:1.5;}
 .onboarding-form{display:flex;flex-direction:column;gap:16px;}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
@@ -46,25 +47,60 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
 /* SHELL */
 .shell{display:flex;height:100vh;min-height:600px;}
 
-/* SIDEBAR */
+/* SIDEBAR & BRANDED EMBLEM */
 .sidebar{width:220px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;transition:width .2s;}
 .logo{padding:20px 18px 16px;border-bottom:1px solid var(--border);}
-.logo-mark{display:flex;align-items:center;gap:8px;}
-.logo-img{width:28px;height:28px;object-fit:contain;}
-.logo-text{font-family:'DM Serif Display',serif;font-size:16px;color:var(--gold2);letter-spacing:.3px;}
+.logo-mark{display:flex;align-items:center;gap:10px;}
+
+/* Integrated Favicon Emblem Container */
+.logo-emblem-container{
+  position:relative;
+  width:36px;
+  height:36px;
+  background:rgba(255,255,255,0.02);
+  border:1px solid rgba(255,182,193,0.22);
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 4px 15px rgba(255,182,193,0.05);
+  transition:all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  flex-shrink:0;
+}
+.logo-emblem-container::before{
+  content:'';
+  position:absolute;
+  inset:-1px;
+  border-radius:10px;
+  background:linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,182,193,0.12));
+  z-index:-1;
+}
+.logo-emblem-container:hover{
+  border-color:rgba(255,182,193,0.45);
+  box-shadow:0 4px 20px rgba(255,182,193,0.18);
+  transform:scale(1.04);
+}
+.logo-img{
+  width:22px;
+  height:22px;
+  object-fit:contain;
+  filter:drop-shadow(0 2px 5px rgba(0,0,0,0.4));
+}
+.logo-text{font-family:'DM Serif Display',serif;font-size:16px;color:var(--pink3);letter-spacing:.3px;}
 .logo-sub{font-size:10px;color:var(--text3);letter-spacing:.5px;text-transform:uppercase;margin-top:2px;}
+
 .nav{flex:1;padding:12px 8px;overflow-y:auto;}
 .nav-section{margin-bottom:20px;}
 .nav-label{font-size:10px;font-weight:500;color:var(--text3);letter-spacing:.8px;text-transform:uppercase;padding:0 8px 6px;}
 .nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;cursor:pointer;color:var(--text2);font-size:13px;transition:all .15s;border:1px solid transparent;white-space:nowrap;overflow:hidden;margin-bottom:2px;}
 .nav-item:hover{background:var(--bg3);color:var(--text);}
-.nav-item.active{background:rgba(201,168,76,.12);color:var(--gold2);border-color:rgba(201,168,76,.18);font-weight:500;}
+.nav-item.active{background:rgba(255,182,193,.08);color:var(--pink3);border-color:rgba(255,182,193,.15);font-weight:500;}
 .nav-item .icon{font-size:15px;flex-shrink:0;}
-.nav-badge{margin-left:auto;background:var(--gold);color:#0E0E10;font-size:10px;font-weight:600;padding:1px 6px;border-radius:10px;}
+.nav-badge{margin-left:auto;background:var(--pink);color:#0E0E10;font-size:10px;font-weight:600;padding:1px 6px;border-radius:10px;}
 .sidebar-footer{padding:12px;border-top:1px solid var(--border);}
 .user-card{display:flex;align-items:center;gap:9px;padding:8px;border-radius:8px;cursor:pointer;transition:background .15s;}
 .user-card:hover{background:var(--bg3);}
-.avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#0E0E10;flex-shrink:0;overflow:hidden;}
+.avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--pink3));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#0E0E10;flex-shrink:0;overflow:hidden;}
 .avatar img{width:100%;height:100%;object-fit:cover;}
 .user-name{font-size:12px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .user-role{font-size:10px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -72,18 +108,18 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
 /* MAIN */
 .main{flex:1;overflow:hidden;display:flex;flex-direction:column;min-width:0;}
 .topbar{height:52px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0;}
-.topbar-title{font-family:'DM Serif Display',serif;font-size:17px;color:var(--gold2);flex:1;}
+.topbar-title{font-family:'DM Serif Display',serif;font-size:17px;color:var(--pink3);flex:1;}
 .topbar-actions{display:flex;align-items:center;gap:8px;}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:6px 13px;border-radius:7px;cursor:pointer;font-size:12px;font-weight:500;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);transition:all .15s;user-select:none;}
 .btn:hover{background:var(--bg4);color:var(--text);}
-.btn-gold{background:var(--gold);border-color:var(--gold);color:#0E0E10;font-weight:600;}
-.btn-gold:hover{background:var(--gold2);}
-.btn-red{background:rgba(232,87,74,.15);border-color:rgba(232,87,74,.25);color:var(--red);}
+.btn-gold{background:var(--accent);border-color:var(--accent);color:#0E0E10;font-weight:600;}
+.btn-gold:hover{background:var(--pink3);border-color:var(--pink3);color:#0E0E10;box-shadow:0 0 12px rgba(255,182,193,0.22);}
+.btn-red{background:rgba(232,87,74,.12);border-color:rgba(232,87,74,.25);color:var(--red);}
 .btn-red:hover{background:rgba(232,87,74,.25);color:#ff7c70;}
 .search{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:6px 10px;color:var(--text);font-size:12px;width:180px;outline:none;transition:width 0.2s;}
-.search:focus{width:240px;border-color:var(--gold);}
+.search:focus{width:240px;border-color:var(--pink);}
 .search::placeholder{color:var(--text3);}
-.notif-dot{width:7px;height:7px;background:var(--gold);border-radius:50%;position:absolute;top:2px;right:2px;}
+.notif-dot{width:7px;height:7px;background:var(--pink);border-radius:50%;position:absolute;top:2px;right:2px;}
 .pos-rel{position:relative;}
 
 .content{flex:1;overflow-y:auto;padding:20px;background:#111113;}
@@ -96,7 +132,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
 .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px;}
 .kpi-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius2);padding:16px;position:relative;overflow:hidden;transition:border-color .2s,transform .15s;}
 .kpi-card:hover{border-color:var(--border2);transform:translateY(-1px);}
-.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent,var(--gold)),transparent);opacity:.5;}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent-line,var(--pink)),transparent);opacity:.5;}
 .kpi-label{font-size:11px;color:var(--text3);font-weight:500;letter-spacing:.4px;text-transform:uppercase;margin-bottom:8px;}
 .kpi-val{font-size:24px;font-weight:600;color:var(--text);font-variant-numeric:tabular-nums;line-height:1;}
 .kpi-sub{font-size:11px;color:var(--text3);margin-top:6px;display:flex;align-items:center;gap:4px;}
@@ -121,11 +157,11 @@ svg.chart{width:100%;height:100%;overflow:visible;}
 .doc-table tr:hover td{background:rgba(255,255,255,.012);color:var(--text);cursor:pointer;}
 .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:5px;font-size:11px;font-weight:500;}
 .badge-green{background:rgba(74,191,168,.12);color:var(--green);border:1px solid rgba(74,191,168,0.2);}
-.badge-amber{background:rgba(232,154,74,.12);color:var(--orange);border:1px solid rgba(232,154,74,0.2);}
+.badge-amber{background:rgba(255,182,193,.12);color:var(--pink);border:1px solid rgba(255,182,193,0.2);}
 .badge-red{background:rgba(232,87,74,.12);color:var(--red);border:1px solid rgba(232,87,74,0.2);}
 .badge-blue{background:rgba(91,143,212,.12);color:var(--blue);border:1px solid rgba(91,143,212,0.2);}
 .badge-gray{background:rgba(168,164,156,.08);color:var(--text3);border:1px solid rgba(168,164,156,0.15);}
-.doc-type{font-weight:600;color:var(--gold2);font-size:11px;background:rgba(232,196,112,0.08);padding:2px 5px;border-radius:4px;letter-spacing:0.3px;}
+.doc-type{font-weight:600;color:var(--pink3);font-size:11px;background:rgba(255,182,193,0.08);padding:2px 5px;border-radius:4px;letter-spacing:0.3px;}
 .doc-num{font-size:12px;color:var(--text2);font-weight:500;margin-left:4px;}
 .client{font-weight:500;color:var(--text);}
 .amount{font-variant-numeric:tabular-nums;text-align:right;font-weight:600;color:var(--text);}
@@ -140,41 +176,26 @@ svg.chart{width:100%;height:100%;overflow:visible;}
 .act-time{font-size:11px;color:var(--text3);margin-left:auto;flex-shrink:0;}
 .quick-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
 .qa{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:12px;cursor:pointer;transition:all .15s;text-align:left;}
-.qa:hover{border-color:var(--gold);background:rgba(201,168,76,.06);transform:translateY(-1px);}
+.qa:hover{border-color:var(--pink);background:rgba(255,182,193,.04);transform:translateY(-1px);}
 .qa-icon{font-size:20px;margin-bottom:6px;}
 .qa-title{font-size:12px;font-weight:500;color:var(--text);}
 .qa-sub{font-size:11px;color:var(--text3);margin-top:2px;}
-
-/* AI PANEL */
-.ai-panel{background:var(--bg2);border:1px solid rgba(201,168,76,.2);border-radius:var(--radius2);padding:16px;margin-bottom:18px;position:relative;overflow:hidden;}
-.ai-panel::before{content:'';position:absolute;top:-40px;right:-40px;width:120px;height:120px;background:radial-gradient(circle,rgba(201,168,76,.07),transparent 70%);pointer-events:none;}
-.ai-header{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
-.ai-badge{background:rgba(201,168,76,.15);color:var(--gold2);font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;letter-spacing:.4px;text-transform:uppercase;}
-.ai-input-row{display:flex;gap:8px;}
-.ai-input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:8px 12px;color:var(--text);font-size:13px;outline:none;font-family:'DM Sans',sans-serif;transition:border-color 0.2s;}
-.ai-input::placeholder{color:var(--text3);}
-.ai-input:focus{border-color:rgba(201,168,76,.4);}
-.ai-output{margin-top:12px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:12.5px;color:var(--text2);line-height:1.7;display:none;}
-.ai-output.show{display:block;}
-.ai-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
-.ai-tag{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:4px 10px;font-size:11px;color:var(--text3);cursor:pointer;transition:all .15s;}
-.ai-tag:hover{border-color:var(--gold);color:var(--gold2);}
 
 /* MODALS */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;align-items:center;justify-content:center;backdrop-filter:blur(4px);animation:fadeIn 0.2s;}
 .modal-overlay.show{display:flex;}
 .modal{background:var(--bg2);border:1px solid var(--border2);border-radius:16px;padding:24px;width:480px;max-width:90vw;box-shadow:0 12px 36px rgba(0,0,0,0.5);animation:slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);}
-.modal-title{font-family:'DM Serif Display',serif;font-size:20px;color:var(--gold2);margin-bottom:6px;}
+.modal-title{font-family:'DM Serif Display',serif;font-size:20px;color:var(--pink3);margin-bottom:6px;}
 .modal-sub{font-size:13px;color:var(--text3);margin-bottom:20px;}
 .doc-type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px;}
 .doc-type-btn{background:var(--bg3);border:1px solid var(--border);border-radius:9px;padding:12px 8px;text-align:center;cursor:pointer;transition:all .15s;}
-.doc-type-btn:hover,.doc-type-btn.sel{border-color:var(--gold);background:rgba(201,168,76,.08);}
+.doc-type-btn:hover,.doc-type-btn.sel{border-color:var(--pink);background:rgba(255,182,193,.06);}
 .doc-type-btn .dt-icon{font-size:22px;margin-bottom:4px;}
 .doc-type-btn .dt-name{font-size:11px;font-weight:500;color:var(--text2);}
 .form-row{margin-bottom:12px;}
 .form-label{font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px;display:block;}
 .form-input,.form-select,.form-textarea{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:8px 10px;color:var(--text);font-size:13px;outline:none;font-family:'DM Sans',sans-serif;transition:border-color 0.2s;}
-.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:rgba(201,168,76,.4);}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:rgba(255,182,193,.45);}
 .form-select option{background:var(--bg3);}
 .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;}
 
@@ -186,7 +207,7 @@ svg.chart{width:100%;height:100%;overflow:visible;}
 .items-table td{padding:8px 4px;vertical-align:middle;}
 .summary-box{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:10px;margin-top:12px;}
 .summary-line{display:flex;justify-content:space-between;font-size:13px;color:var(--text2);}
-.summary-total{border-top:1px solid var(--border);padding-top:10px;font-size:16px;font-weight:600;color:var(--gold2);}
+.summary-total{border-top:1px solid var(--border);padding-top:10px;font-size:16px;font-weight:600;color:var(--pink3);}
 
 /* PREVIEW WORKSPACE */
 .preview-container{display:flex;flex-direction:column;align-items:center;padding:10px 0;}
@@ -219,12 +240,12 @@ svg.chart{width:100%;height:100%;overflow:visible;}
 .invoice-a4.tmpl-minimalist .a4-table th{border-bottom-color:#1e1e24;color:#1e1e24;}
 .invoice-a4.tmpl-minimalist .a4-total-row{border-top-color:#1e1e24;}
 
-/* 2. Speco Gold Classic Template */
-.invoice-a4.tmpl-speco-gold{font-family:'DM Sans', sans-serif;border-top:10px solid #C9A84C;}
-.invoice-a4.tmpl-speco-gold .a4-meta-title{font-family:'DM Serif Display', serif;color:#C9A84C;font-size:28px;}
-.invoice-a4.tmpl-speco-gold .a4-sec-label{color:#a4812f;border-bottom-color:#E8C470;}
-.invoice-a4.tmpl-speco-gold .a4-table th{border-bottom-color:#C9A84C;color:#a4812f;}
-.invoice-a4.tmpl-speco-gold .a4-total-row{border-top-color:#C9A84C;color:#a4812f;border-bottom:3px double #C9A84C;padding-bottom:4px;}
+/* 2. Blush Luxury Template (Re-themed Speco Classic Gold) */
+.invoice-a4.tmpl-blush-luxury{font-family:'DM Sans', sans-serif;border-top:10px solid var(--pink);}
+.invoice-a4.tmpl-blush-luxury .a4-meta-title{font-family:'DM Serif Display', serif;color:var(--pink);font-size:28px;}
+.invoice-a4.tmpl-blush-luxury .a4-sec-label{color:#a86772;border-bottom-color:var(--pink3);}
+.invoice-a4.tmpl-blush-luxury .a4-table th{border-bottom-color:var(--pink);color:#a86772;}
+.invoice-a4.tmpl-blush-luxury .a4-total-row{border-top-color:var(--pink);color:#a86772;border-bottom:3px double var(--pink);padding-bottom:4px;}
 
 /* 3. Modern Indigo Template */
 .invoice-a4.tmpl-modern-indigo{font-family:'DM Sans', sans-serif;}
@@ -244,16 +265,16 @@ svg.chart{width:100%;height:100%;overflow:visible;}
 .tmpl-selector{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
 .tmpl-thumb{background:var(--bg3);border:2px solid var(--border);border-radius:10px;padding:12px;cursor:pointer;text-align:center;transition:all 0.15s;}
 .tmpl-thumb:hover{border-color:var(--border2);}
-.tmpl-thumb.active{border-color:var(--gold);background:rgba(201,168,76,0.06);}
+.tmpl-thumb.active{border-color:var(--pink);background:rgba(255,182,193,0.04);}
 .tmpl-preview-mini{height:80px;background:white;border-radius:4px;margin-bottom:8px;position:relative;overflow:hidden;border:1px solid rgba(0,0,0,0.15);}
 .tmpl-bar{height:4px;background:#6B6760;width:80%;margin:6px auto 0;}
-.tmpl-thumb.active .tmpl-preview-mini{box-shadow:0 0 10px rgba(201,168,76,0.3);}
+.tmpl-thumb.active .tmpl-preview-mini{box-shadow:0 0 10px rgba(255,182,193,0.25);}
 
 /* NOTIFICATIONS LIST */
 .notif-list{display:flex;flex-direction:column;gap:10px;}
 .notif-item{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px;display:flex;align-items:flex-start;gap:12px;transition:border-color 0.15s;}
 .notif-item:hover{border-color:var(--border2);}
-.notif-item-unread{border-left:3px solid var(--gold);}
+.notif-item-unread{border-left:3px solid var(--pink);}
 .notif-icon{font-size:18px;margin-top:2px;}
 .notif-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px;}
 .notif-desc{font-size:12px;color:var(--text2);line-height:1.4;}
@@ -330,7 +351,10 @@ svg.chart{width:100%;height:100%;overflow:visible;}
 <div class="onboarding-screen" id="onboarding-screen" style="display: none;">
   <div class="onboarding-card">
     <div class="onboarding-header">
-      <img src="favicon.png" class="onboarding-logo" alt="DocuFlow Pro">
+      <!-- Embedded Favicon Container -->
+      <div class="logo-emblem-container" style="margin: 0 auto 12px; width: 46px; height: 46px; border-radius: 12px;">
+        <img src="favicon.png" class="logo-img" style="width: 28px; height: 28px" alt="DocuFlow Pro">
+      </div>
       <div class="onboarding-title">Welcome to DocuFlow Pro</div>
       <div class="onboarding-subtitle">Configure your business credentials to begin generating professional, tax-compliant documents.</div>
     </div>
@@ -392,7 +416,10 @@ svg.chart{width:100%;height:100%;overflow:visible;}
   <aside class="sidebar">
     <div class="logo">
       <div class="logo-mark">
-        <img src="favicon.png" class="logo-img" alt="DocuFlow Pro Logo">
+        <!-- Integrated Favicon Emblem Container -->
+        <div class="logo-emblem-container">
+          <img src="favicon.png" class="logo-img" alt="DocuFlow Pro Logo">
+        </div>
         <div>
           <div class="logo-text">DocuFlow</div>
           <div class="logo-sub">Pro · Enterprise</div>
@@ -454,25 +481,25 @@ svg.chart{width:100%;height:100%;overflow:visible;}
       <div id="view-dashboard" class="tab-view show">
         <!-- KPI CARDS -->
         <div class="kpi-grid">
-          <div class="kpi-card" style="--accent:var(--gold)">
+          <div class="kpi-card" style="--accent-line:var(--pink)">
             <div class="kpi-label">Total Revenue</div>
             <div class="kpi-val" id="rev-val">R 0</div>
             <div class="kpi-sub"><span class="trend-up">↑ 18.4%</span>&nbsp;vs last month</div>
             <div class="kpi-icon"><i class="ti ti-coin"></i></div>
           </div>
-          <div class="kpi-card" style="--accent:var(--red)">
+          <div class="kpi-card" style="--accent-line:var(--red)">
             <div class="kpi-label">Outstanding Invoices</div>
             <div class="kpi-val" id="out-val">R 0</div>
             <div class="kpi-sub" id="out-overdue-desc"><span class="trend-dn">↓ 1 overdue</span></div>
             <div class="kpi-icon"><i class="ti ti-clock"></i></div>
           </div>
-          <div class="kpi-card" style="--accent:var(--green)">
+          <div class="kpi-card" style="--accent-line:var(--green)">
             <div class="kpi-label">Quotes Accepted</div>
             <div class="kpi-val" id="quotes-val">0%</div>
             <div class="kpi-sub"><span class="trend-up">↑ 6.1%</span>&nbsp;conversion</div>
             <div class="kpi-icon"><i class="ti ti-check"></i></div>
           </div>
-          <div class="kpi-card" style="--accent:var(--blue)">
+          <div class="kpi-card" style="--accent-line:var(--blue)">
             <div class="kpi-label">Active Customers</div>
             <div class="kpi-val" id="cust-val">0</div>
             <div class="kpi-sub"><span class="trend-up">↑ 2 this month</span></div>
@@ -505,27 +532,7 @@ svg.chart{width:100%;height:100%;overflow:visible;}
           </div>
         </div>
 
-        <!-- AI ASSISTANT -->
-        <div class="ai-panel">
-          <div class="ai-header">
-            <i class="ti ti-sparkles" style="color:var(--gold);font-size:16px"></i>
-            <span style="font-size:13px;font-weight:500;color:var(--text)">AI Business Assistant</span>
-            <span class="ai-badge">DocuFlow AI</span>
-          </div>
-          <div class="ai-input-row">
-            <input class="ai-input" id="ai-input" placeholder="Draft a payment reminder for Themane Management… or ask anything" onkeydown="if(event.key==='Enter')runAI()">
-            <button class="btn btn-gold" onclick="runAI()"><i class="ti ti-send"></i> Ask</button>
-          </div>
-          <div class="ai-tags">
-            <span class="ai-tag" onclick="setAIPrompt('Draft a professional invoice description for construction consulting services')">✦ Invoice description</span>
-            <span class="ai-tag" onclick="setAIPrompt('Write a payment reminder email for an overdue invoice of R45,000')">✦ Payment reminder</span>
-            <span class="ai-tag" onclick="setAIPrompt('Summarise outstanding supplier payments and recommend action')">✦ Supplier summary</span>
-            <span class="ai-tag" onclick="setAIPrompt('Generate a quote description for digital tooling implementation')">✦ Quote description</span>
-          </div>
-          <div class="ai-output" id="ai-output"></div>
-        </div>
-
-        <!-- RECENT DOCUMENTS -->
+        <!-- RECENT DOCUMENTS (Now fits beautifully without the AI assistant card) -->
         <div class="card" style="margin-bottom:18px">
           <div class="card-header">
             <div class="card-title">Recent Documents</div>
@@ -556,7 +563,7 @@ svg.chart{width:100%;height:100%;overflow:visible;}
             <div class="card-header"><div class="card-title">Quick Actions</div></div>
             <div class="quick-actions">
               <div class="qa" onclick="openNewDocEditor('INV')">
-                <div class="qa-icon"><i class="ti ti-receipt" style="color:var(--gold)"></i></div>
+                <div class="qa-icon"><i class="ti ti-receipt" style="color:var(--pink)"></i></div>
                 <div class="qa-title">New Invoice</div>
                 <div class="qa-sub">Billable to client</div>
               </div>
@@ -610,7 +617,7 @@ svg.chart{width:100%;height:100%;overflow:visible;}
           </div>
           
           <div style="display:flex; justify-content:center; gap:24px; font-size:12px; color:var(--text2); margin-top:10px;">
-            <span style="display:flex; align-items:center; gap:6px;"><span style="width:12px; height:12px; background:var(--gold); display:inline-block; border-radius:3px;"></span> Billed Revenue</span>
+            <span style="display:flex; align-items:center; gap:6px;"><span style="width:12px; height:12px; background:var(--pink); display:inline-block; border-radius:3px;"></span> Billed Revenue</span>
             <span style="display:flex; align-items:center; gap:6px;"><span style="width:12px; height:12px; background:var(--red); display:inline-block; border-radius:3px;"></span> Estimated Expenses</span>
           </div>
         </div>
@@ -648,7 +655,7 @@ svg.chart{width:100%;height:100%;overflow:visible;}
                   <span id="aging-overdue-val" style="font-weight:600">R 22,000.00</span>
                 </div>
                 <div style="height:6px; background:var(--border); border-radius:3px; overflow:hidden">
-                  <div style="height:100%; width:30%; background:var(--orange)"></div>
+                  <div style="height:100%; width:30%; background:var(--pink)"></div>
                 </div>
               </div>
               <div>
@@ -816,14 +823,14 @@ svg.chart{width:100%;height:100%;overflow:visible;}
               <div style="font-size:10px;color:var(--text3);margin-top:2px;">Clean, corporate format</div>
             </div>
             
-            <div class="tmpl-thumb" id="thumb-speco-gold" onclick="selectInvoiceTemplate('speco-gold')">
-              <div class="tmpl-preview-mini" style="background:#ffffff; border-top: 4px solid var(--gold)">
-                <div style="height:6px;background:rgba(201,168,76,0.15);width:100%;margin-bottom:12px;"></div>
-                <div class="tmpl-bar" style="width:40%;background:var(--gold);margin-left:10px;"></div>
+            <div class="tmpl-thumb" id="thumb-blush-luxury" onclick="selectInvoiceTemplate('blush-luxury')">
+              <div class="tmpl-preview-mini" style="background:#ffffff; border-top: 4px solid var(--pink)">
+                <div style="height:6px;background:rgba(255,182,193,0.15);width:100%;margin-bottom:12px;"></div>
+                <div class="tmpl-bar" style="width:40%;background:var(--pink);margin-left:10px;"></div>
                 <div class="tmpl-bar" style="width:60%;margin-left:10px;"></div>
               </div>
-              <div style="font-weight:600;font-size:12px;color:var(--gold2)">Speco Gold Classic</div>
-              <div style="font-size:10px;color:var(--text3);margin-top:2px;">Double border premium look</div>
+              <div style="font-weight:600;font-size:12px;color:var(--pink)">Blush Luxury</div>
+              <div style="font-size:10px;color:var(--text3);margin-top:2px;">Pink highlights premium theme</div>
             </div>
 
             <div class="tmpl-thumb" id="thumb-modern-indigo" onclick="selectInvoiceTemplate('modern-indigo')">
@@ -840,7 +847,7 @@ svg.chart{width:100%;height:100%;overflow:visible;}
               <div class="tmpl-preview-mini" style="background:#ffffff">
                 <div style="height:4px;background:#1a7a60;width:100%;margin-bottom:10px;"></div>
                 <div class="tmpl-bar" style="width:50%;background:#1a7a60;margin-left:10px;"></div>
-                <div class="tmpl-bar" style="width:60%;margin-left:10px;"></div>
+                <div class="tmpl-bar" style="width:60%;background:#1a7a60;margin-left:10px;"></div>
               </div>
               <div style="font-weight:600;font-size:12px;color:var(--text)">Emerald Clean</div>
               <div style="font-size:10px;color:var(--text3);margin-top:2px;">High contrast modern layout</div>
@@ -862,7 +869,7 @@ svg.chart{width:100%;height:100%;overflow:visible;}
                 <div style="font-weight:600; font-size:13px; color:var(--text)">Auto-email Invoice on Save</div>
                 <div style="font-size:11px; color:var(--text3); margin-top:2px">Instantly triggers simulated customer mailing upon document creation</div>
               </div>
-              <input type="checkbox" id="auto-email" style="accent-color:var(--gold); width:18px; height:18px;" checked>
+              <input type="checkbox" id="auto-email" style="accent-color:var(--pink); width:18px; height:18px;" checked>
             </div>
             
             <div style="display:flex; justify-content:space-between; align-items:center; padding:12px; background:var(--bg3); border-radius:8px; border:1px solid var(--border)">
@@ -870,7 +877,7 @@ svg.chart{width:100%;height:100%;overflow:visible;}
                 <div style="font-weight:600; font-size:13px; color:var(--text)">Automated Dunning Reminders</div>
                 <div style="font-size:11px; color:var(--text3); margin-top:2px">Auto-generates notification alerts and reminders for invoices overdue by 7 days</div>
               </div>
-              <input type="checkbox" id="auto-remind" style="accent-color:var(--gold); width:18px; height:18px;" checked>
+              <input type="checkbox" id="auto-remind" style="accent-color:var(--pink); width:18px; height:18px;" checked>
             </div>
 
             <div style="display:flex; justify-content:space-between; align-items:center; padding:12px; background:var(--bg3); border-radius:8px; border:1px solid var(--border)">
@@ -878,7 +885,7 @@ svg.chart{width:100%;height:100%;overflow:visible;}
                 <div style="font-weight:600; font-size:13px; color:var(--text)">EFT Invoice Signature Locking</div>
                 <div style="font-size:11px; color:var(--text3); margin-top:2px">Lock generated documents from editing once they have been marked as approved or paid</div>
               </div>
-              <input type="checkbox" id="auto-lock" style="accent-color:var(--gold); width:18px; height:18px;" checked>
+              <input type="checkbox" id="auto-lock" style="accent-color:var(--pink); width:18px; height:18px;" checked>
             </div>
           </div>
         </div>
@@ -1171,7 +1178,7 @@ svg.chart{width:100%;height:100%;overflow:visible;}
 
     <div class="status-bar">
       <span><span class="status-dot"></span>All systems operational</span>
-      <span id="footer-vat-label">Speco Group (Pty) Ltd · VAT: ZA 4123456789</span>
+      <span id="footer-vat-label">Speco Group (Pty) Ltd · VAT: N/A</span>
       <span style="margin-left:auto">DocuFlow Pro v2.0 · Local Secure Sandbox</span>
     </div>
   </div><!-- /main -->
@@ -1257,7 +1264,7 @@ let documents = [
 let activity = [
   {color: 'var(--green)', text: 'Invoice INV-2026-0012 marked as paid by Themane MC', time: '2 min ago'},
   {color: 'var(--blue)', text: 'Quotation QT-2026-0008 sent to VDLV Projects', time: '34 min ago'},
-  {color: 'var(--gold)', text: 'Purchase Order PO-2026-0005 approved by Finance', time: '1 hr ago'},
+  {color: 'var(--pink)', text: 'Purchase Order PO-2026-0005 approved by Finance', time: '1 hr ago'},
   {color: 'var(--red)', text: 'INV-2026-0011 is 7 days overdue — reminder scheduled', time: '3 hr ago'},
   {color: 'var(--text3)', text: 'New customer Raubex Supply Chain added', time: 'Yesterday'}
 ];
@@ -1357,7 +1364,7 @@ function updateSidebarBranding() {
     // Use initials
     const initials = companyProfile.name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
     avatar.textContent = initials;
-    avatar.style.background = 'linear-gradient(135deg,var(--gold),var(--gold2))';
+    avatar.style.background = 'linear-gradient(135deg,var(--pink),var(--pink3))';
   }
 }
 
@@ -1561,14 +1568,14 @@ function drawRevChart() {
   svg.innerHTML = `
     <defs>
       <linearGradient id="revGrad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#C9A84C" stop-opacity="0.25"/>
-        <stop offset="100%" stop-color="#C9A84C" stop-opacity="0"/>
+        <stop offset="0%" stop-color="#FFB6C1" stop-opacity="0.22"/>
+        <stop offset="100%" stop-color="#FFB6C1" stop-opacity="0"/>
       </linearGradient>
     </defs>
     <path d="${fillD}" fill="url(#revGrad)"/>
-    <path d="${pathD}" fill="none" stroke="#C9A84C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="${pathD}" fill="none" stroke="#FFB6C1" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
     ${pts.map((p, i) => `
-      <circle cx="${p.x}" cy="${p.y}" r="3.5" fill="#C9A84C" stroke="#161618" stroke-width="1" style="cursor:pointer;"/>
+      <circle cx="${p.x}" cy="${p.y}" r="3.5" fill="#FFB6C1" stroke="#161618" stroke-width="1" style="cursor:pointer;"/>
       <text x="${p.x}" y="${H - 8}" text-anchor="middle" fill="#6B6760" font-size="9" font-family="DM Sans,sans-serif">${months[i]}</text>
       <text x="${p.x}" y="${p.y - 8}" text-anchor="middle" fill="#A8A49C" font-weight="600" font-size="8.5" font-family="DM Sans,sans-serif">${companyProfile.currencySymbol}${Math.round(revData[i]/1000)}k</text>
     `).join('')}
@@ -1600,7 +1607,7 @@ function drawDonut() {
 
   const data = [
     { v: statusCounts.paid, c: '#4ABFA8', l: 'Paid' },
-    { v: statusCounts.pending, c: '#C9A84C', l: 'Pending' },
+    { v: statusCounts.pending, c: '#FFB6C1', l: 'Pending' },
     { v: statusCounts.overdue, c: '#E8574A', l: 'Overdue' },
     { v: statusCounts.draft, c: '#5B8FD4', l: 'Draft' }
   ];
@@ -1699,7 +1706,7 @@ function renderNotificationsList() {
         <div class="notif-desc">${n.desc}</div>
         <div class="notif-time">${n.time}</div>
       </div>
-      ${!n.read ? `<span style="font-size:9px; color:var(--gold); font-weight:600; cursor:pointer;" onclick="event.stopPropagation(); markNotificationRead(${n.id})">MARK READ</span>` : ''}
+      ${!n.read ? `<span style="font-size:9px; color:var(--pink); font-weight:600; cursor:pointer;" onclick="event.stopPropagation(); markNotificationRead(${n.id})">MARK READ</span>` : ''}
     </div>
   `).join('');
 }
@@ -1972,7 +1979,7 @@ function updateAnalyticsCharts(range) {
 
     content += `
       <!-- Revenue Bar -->
-      <rect x="${revX}" y="${revY}" width="${barW}" height="${revH}" fill="#C9A84C" rx="2" style="cursor:pointer; transition: opacity .15s;">
+      <rect x="${revX}" y="${revY}" width="${barW}" height="${revH}" fill="#FFB6C1" rx="2" style="cursor:pointer; transition: opacity .15s;">
         <title>Revenue: ${formatCurrency(b.rev)}</title>
       </rect>
       <!-- Expense Bar -->
@@ -2299,7 +2306,7 @@ function saveEditedDocument() {
     }
     documents.unshift(doc);
     activity.unshift({
-      color: type === 'INV' ? 'var(--gold)' : type === 'QT' ? 'var(--blue)' : 'var(--green)',
+      color: type === 'INV' ? 'var(--pink)' : type === 'QT' ? 'var(--blue)' : 'var(--green)',
       text: `New ${type} ${num} generated for ${client}`,
       time: 'Just now'
     });
@@ -2617,48 +2624,6 @@ function resetApplication() {
   if(!confirm('CAUTION: This will clear all local storage documents, custom CRM customers, and logo assets. Reset?')) return;
   localStorage.clear();
   location.reload();
-}
-
-// ================= AI BUSINESS CHATBOT SIMULATION =================
-const aiResponses = {
-  'invoice': '<strong>Professional Invoice Line Description — Construction Consulting</strong><br><br>Advisory and civil supervision services rendered in accordance with the Engineering Consultancy Agreement. Scope covers daily structural compliance audits, JBCC works administration, concrete cube strength verification, subcontractor progress tracking, and compiling final quality registers in line with SANS 1200 regulations.',
-  'payment': '<strong>Payment Reminder Notification — INV-2026-XXXX</strong><br><br>Dear accounts team,<br><br>This is a friendly reminder that invoice INV-2026-XXXX is currently outstanding. If payment has already been made, please forward the POP receipt to billing. Otherwise, please prioritize settlement of the pending balance via EFT using your account reference. Account details are located on the invoice footer.',
-  'supplier': '<strong>Supplier Pending Accounts Summary</strong><br><br>1 active purchase order is currently logged in directory:<br>• <strong>Raubex Supply Chain</strong>: R 67,200.00 (PO-2026-0005) - due on 13 Jun 2026.<br><br>Recommendation: Allocate funds for Raubex Supply to maintain commercial credit terms.',
-  'quote': '<strong>Quotation Scope of Work — Digital Tooling Implementation</strong><br><br>Deployment, cloud provisioning, and administrator training for the BuildEdge Pro workflow dashboard suite. Encompasses site journal database modules, CRM synchronization hooks, real-time cost-code analytics, and 12 months premium SaaS license hosting.'
-};
-
-function setAIPrompt(promptText) {
-  document.getElementById('ai-input').value = promptText;
-}
-
-function runAI() {
-  const query = document.getElementById('ai-input').value.toLowerCase().trim();
-  const output = document.getElementById('ai-output');
-  if(!query) return;
-
-  output.classList.remove('show');
-  output.style.display = 'block';
-
-  let matchText = '';
-  if(query.includes('invoice') || query.includes('consulting')) {
-    matchText = aiResponses.invoice;
-  } else if(query.includes('payment') || query.includes('reminder')) {
-    matchText = aiResponses.payment;
-  } else if(query.includes('supplier') || query.includes('outstanding')) {
-    matchText = aiResponses.supplier;
-  } else if(query.includes('quote') || query.includes('tooling')) {
-    matchText = aiResponses.quote;
-  } else {
-    matchText = `I can draft dynamic contents for you. Try asking about "invoice description", "payment reminder email", or "supplier purchase orders". Based on your profile, I can format billing contexts in ${companyProfile.currencySymbol} (${companyProfile.currency}).`;
-  }
-
-  // Simulated typing
-  output.innerHTML = '<em>Consulting DocuFlow AI...</em>';
-  output.classList.add('show');
-
-  setTimeout(() => {
-    output.innerHTML = matchText;
-  }, 600);
 }
 
 // ================= FORMATTERS =================

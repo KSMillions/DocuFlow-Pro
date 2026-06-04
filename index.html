@@ -45,9 +45,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
 .auth-emblem img{width:30px;height:30px;object-fit:contain;}
 .auth-brand{font-family:'DM Serif Display',serif;font-size:22px;color:var(--pink3);display:block;}
 .auth-tagline{font-size:12px;color:var(--text3);margin-top:4px;}
-.auth-tabs{display:flex;background:var(--bg3);border:1px solid var(--border);border-radius:9px;padding:4px;margin-bottom:24px;gap:4px;}
-.auth-tab{flex:1;padding:7px;text-align:center;border-radius:6px;font-size:13px;cursor:pointer;color:var(--text3);transition:all .15s;font-weight:500;}
-.auth-tab.active{background:rgba(255,182,193,0.1);color:var(--pink3);border:1px solid rgba(255,182,193,0.2);}
+.auth-tabs{display:none;}
 .auth-form{display:flex;flex-direction:column;gap:14px;}
 .auth-field{display:flex;flex-direction:column;gap:5px;}
 .auth-label{font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.4px;}
@@ -325,11 +323,6 @@ svg.chart{width:100%;height:100%;overflow:visible;}
       <div class="auth-tagline">Enterprise Accounting Document Generator</div>
     </div>
 
-    <div class="auth-tabs">
-      <div class="auth-tab active" id="tab-signin" onclick="switchAuthTab('signin')">Sign In</div>
-      <div class="auth-tab" id="tab-signup" onclick="switchAuthTab('signup')">Create Account</div>
-    </div>
-
     <!-- SIGN IN FORM -->
     <div id="form-signin">
       <div class="auth-form">
@@ -344,28 +337,6 @@ svg.chart{width:100%;height:100%;overflow:visible;}
         <div class="auth-error" id="si-error"></div>
         <button class="auth-btn-primary" id="si-btn" onclick="handleSignIn()">
           <i class="ti ti-login" style="margin-right:6px"></i>Sign In to Dashboard
-        </button>
-      </div>
-    </div>
-
-    <!-- SIGN UP FORM -->
-    <div id="form-signup" style="display:none;">
-      <div class="auth-form">
-        <div class="auth-field">
-          <label class="auth-label">Full Name</label>
-          <input type="text" class="auth-input" id="su-name" placeholder="Jane Smith" autocomplete="name">
-        </div>
-        <div class="auth-field">
-          <label class="auth-label">Email Address</label>
-          <input type="email" class="auth-input" id="su-email" placeholder="your@email.com" autocomplete="email">
-        </div>
-        <div class="auth-field">
-          <label class="auth-label">Password (min. 6 characters)</label>
-          <input type="password" class="auth-input" id="su-password" placeholder="••••••••" autocomplete="new-password">
-        </div>
-        <div class="auth-error" id="su-error"></div>
-        <button class="auth-btn-primary" id="su-btn" onclick="handleSignUp()">
-          <i class="ti ti-user-plus" style="margin-right:6px"></i>Create Free Account
         </button>
       </div>
     </div>
@@ -1106,17 +1077,36 @@ async function completeOnboarding() {
 }
 
 // ══════════════════════════════════════════
-//  LOGO UPLOAD (Supabase Storage)
+//  LOGO UPLOAD (Supabase Storage w/ base64 fallback)
 // ══════════════════════════════════════════
 let pendingLogoFile = null;
+let pendingLogoBase64 = null; // base64 fallback if storage unavailable
 
 async function uploadLogoToStorage(file) {
-  const ext = file.name.split('.').pop();
-  const path = `${currentUser.id}/logo.${ext}`;
-  const { error } = await sb.storage.from('logos').upload(path, file, { upsert: true, contentType: file.type });
-  if(error) throw error;
-  const { data: urlData } = sb.storage.from('logos').getPublicUrl(path);
-  return urlData.publicUrl + '?t=' + Date.now(); // cache bust
+  try {
+    const ext = file.name.split('.').pop();
+    const path = `${currentUser.id}/logo.${ext}`;
+    const { error } = await sb.storage.from('logos').upload(path, file, { upsert: true, contentType: file.type });
+    if(error) {
+      // Storage bucket may not be configured — fall back to base64 stored in DB
+      console.warn('Storage upload failed, using base64 fallback:', error.message);
+      return await readFileAsBase64(file);
+    }
+    const { data: urlData } = sb.storage.from('logos').getPublicUrl(path);
+    return urlData.publicUrl + '?t=' + Date.now(); // cache bust
+  } catch(err) {
+    console.warn('Storage error, using base64 fallback:', err.message);
+    return await readFileAsBase64(file);
+  }
+}
+
+function readFileAsBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = e => resolve(e.target.result);
+    reader.onerror = () => reject(new Error('Failed to read file'));
+    reader.readAsDataURL(file);
+  });
 }
 
 function handleLogoUpload(event, prefix) {

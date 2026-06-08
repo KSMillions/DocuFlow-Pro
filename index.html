@@ -307,6 +307,25 @@ svg.chart{width:100%;height:100%;overflow:visible;}
   font-family: 'DM Sans', sans-serif;
   z-index: 10;
 }
+.landing-bg-logo {
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  width: 760px;
+  height: 760px;
+  transform: translate(-50%, -50%);
+  background: url('favicon.png') no-repeat center;
+  background-size: contain;
+  opacity: 0.018;
+  pointer-events: none;
+  z-index: 0;
+  animation: floatBgLogo 35s infinite alternate ease-in-out;
+}
+@keyframes floatBgLogo {
+  0% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+  50% { transform: translate(-48%, -53%) rotate(2deg) scale(1.03); }
+  100% { transform: translate(-52%, -47%) rotate(-2deg) scale(0.97); }
+}
 .glow-blob {
   position: absolute;
   width: 600px;
@@ -863,6 +882,9 @@ svg.chart{width:100%;height:100%;overflow:visible;}
   <!-- Glow Blobs -->
   <div class="glow-blob blob-1"></div>
   <div class="glow-blob blob-2"></div>
+  
+  <!-- Background Logo Watermark -->
+  <div class="landing-bg-logo"></div>
   
   <!-- Navigation -->
   <header class="landing-nav">

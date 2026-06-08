@@ -225,7 +225,7 @@ svg.chart{width:100%;height:100%;overflow:visible;}
 .a4-summary{width:280px;display:flex;flex-direction:column;gap:8px;}
 .a4-summary-row{display:flex;justify-content:space-between;}
 .a4-total-row{font-size:15px;font-weight:700;border-top:2px solid #e1e1e6;padding-top:8px;}
-.a4-notes{margin-top:60px;border-top:1px solid #efeff3;padding-top:16px;font-size:10.5px;color:#6b6b76;}
+.a4-notes{margin-top:60px;border-top:1px solid #efeff3;padding-top:16px;font-size:10.5px;color:#6b6b76;} #a4-notes-content{white-space:pre-line;line-height:1.6;}
 
 /* Templates */
 .invoice-a4.tmpl-minimalist{font-family:'DM Sans', sans-serif;}
@@ -1702,7 +1702,7 @@ svg.chart{width:100%;height:100%;overflow:visible;}
               <div class="form-row" style="background:var(--bg3);padding:16px;border-radius:10px;border:1px solid var(--border)">
                 <div class="form-label" style="margin-bottom:8px">Billing Items</div>
                 <table class="items-table">
-                  <thead><tr><th style="width:50%">Item / Work Description</th><th style="width:12%">Quantity</th><th style="width:18%">Unit Price</th><th style="width:12%">Tax (VAT)</th><th style="text-align:right;width:8%">Total</th><th></th></tr></thead>
+                  <thead><tr><th style="width:44%">Item / Work Description</th><th style="width:10%">Unit</th><th style="width:10%">Quantity</th><th style="width:16%">Unit Price</th><th style="width:12%">Tax (VAT)</th><th style="text-align:right;width:8%">Total</th><th></th></tr></thead>
                   <tbody id="editor-items-tbody"></tbody>
                 </table>
                 <button class="btn" style="margin-top:12px;width:100%;border-style:dashed;" onclick="addEditorItemRow()"><i class="ti ti-plus"></i> Add Item Line</button>
@@ -1789,7 +1789,7 @@ svg.chart{width:100%;height:100%;overflow:visible;}
               </div>
             </div>
             <table class="a4-table">
-              <thead><tr><th style="width:55%">Description</th><th style="width:10%;text-align:center;">Qty</th><th style="width:15%;text-align:right;">Unit Price</th><th style="width:10%;text-align:center;">VAT</th><th style="width:10%;text-align:right;">Total</th></tr></thead>
+              <thead><tr><th style="width:45%">Description</th><th style="width:8%;text-align:center;">Unit</th><th style="width:8%;text-align:center;">Qty</th><th style="width:16%;text-align:right;">Unit Price</th><th style="width:10%;text-align:center;">VAT</th><th style="width:13%;text-align:right;">Total</th></tr></thead>
               <tbody id="a4-items-tbody"></tbody>
             </table>
             <div class="a4-summary-wrapper">
@@ -2544,7 +2544,7 @@ let editorItems = [];
 
 function openNewDocEditor(defaultType='INV') {
   editingDocId = null; editingSupabaseId = null;
-  editorItems = [{desc:'',qty:1,price:0,taxRate:15}];
+  editorItems = [{desc:'',qty:1,uom:'item',price:0,taxRate:15}];
   document.getElementById('editor-title').textContent = 'Create New Document';
   populateEditorClients(defaultType);
   document.getElementById('editor-doc-type').value = defaultType;
@@ -2581,12 +2581,16 @@ function generateAutoDocCode(type) {
   return `${type}-${year}-${String(count).padStart(4,'0')}`;
 }
 
+const UOM_OPTIONS = ['item','m','m²','m³','nr','hr','kg','l','set','ls'];
+
 function renderEditorItemsTable() {
   const tbody = document.getElementById('editor-items-tbody');
   tbody.innerHTML = '';
   editorItems.forEach((item,idx) => {
+    const uomOpts = UOM_OPTIONS.map(u=>`<option value="${u}" ${(item.uom||'item')===u?'selected':''}>${u}</option>`).join('');
     const tr = document.createElement('tr');
     tr.innerHTML = `<td><input type="text" class="form-input" style="width:100%" placeholder="e.g. Consulting services" value="${item.desc}" oninput="updateEditorItem(${idx},'desc',this.value)"></td>
+    <td><select class="form-select" style="font-size:11px;" onchange="updateEditorItem(${idx},'uom',this.value)">${uomOpts}</select></td>
     <td><input type="number" class="form-input" style="text-align:center" min="1" value="${item.qty}" oninput="updateEditorItem(${idx},'qty',parseFloat(this.value)||0)"></td>
     <td><div style="display:flex;align-items:center;gap:4px"><span>${companyProfile.currencySymbol}</span><input type="number" class="form-input" style="text-align:right" value="${item.price}" oninput="updateEditorItem(${idx},'price',parseFloat(this.value)||0)"></div></td>
     <td><select class="form-select" onchange="updateEditorItem(${idx},'taxRate',parseFloat(this.value))"><option value="15" ${item.taxRate===15?'selected':''}>15% VAT</option><option value="0" ${item.taxRate===0?'selected':''}>0% Exempt</option></select></td>
@@ -2596,12 +2600,12 @@ function renderEditorItemsTable() {
   });
 }
 
-function addEditorItemRow() { editorItems.push({desc:'',qty:1,price:0,taxRate:15}); renderEditorItemsTable(); recalculateEditorSums(); }
+function addEditorItemRow() { editorItems.push({desc:'',qty:1,uom:'item',price:0,taxRate:15}); renderEditorItemsTable(); recalculateEditorSums(); }
 function removeEditorItemRow(idx) { if(editorItems.length===1){showToast('At least one item required','error');return;} editorItems.splice(idx,1); renderEditorItemsTable(); recalculateEditorSums(); }
 function updateEditorItem(idx,prop,value) {
   editorItems[idx][prop]=value;
   const trs=document.getElementById('editor-items-tbody').children;
-  if(trs[idx]){const td=trs[idx].children[4];td.textContent=formatCurrency(editorItems[idx].qty*editorItems[idx].price*(1+(editorItems[idx].taxRate/100)));}
+  if(trs[idx]){const td=trs[idx].children[5];td.textContent=formatCurrency(editorItems[idx].qty*editorItems[idx].price*(1+(editorItems[idx].taxRate/100)));}
   recalculateEditorSums();
 }
 function recalculateEditorSums() {
@@ -2714,7 +2718,7 @@ function viewDocumentDetails(docId) {
     const lt=item.qty*item.price, lineTax=lt*(item.taxRate/100);
     subtotal+=lt; taxSum+=lineTax;
     const tr=document.createElement('tr');
-    tr.innerHTML=`<td style="font-weight:600;color:#1c1c1f">${item.desc}</td><td style="text-align:center;">${item.qty}</td><td style="text-align:right;">${formatCurrencyCustom(item.price,doc.currency||companyProfile.currency)}</td><td style="text-align:center;color:#5c5c64">${item.taxRate}%</td><td style="text-align:right;font-weight:600;">${formatCurrencyCustom(lt+lineTax,doc.currency||companyProfile.currency)}</td>`;
+    tr.innerHTML=`<td style="font-weight:600;color:#1c1c1f">${item.desc}</td><td style="text-align:center;color:#6b6b76;font-size:10px;">${item.uom||'item'}</td><td style="text-align:center;">${item.qty}</td><td style="text-align:right;">${formatCurrencyCustom(item.price,doc.currency||companyProfile.currency)}</td><td style="text-align:center;color:#5c5c64">${item.taxRate}%</td><td style="text-align:right;font-weight:600;">${formatCurrencyCustom(lt+lineTax,doc.currency||companyProfile.currency)}</td>`;
     tbody.appendChild(tr);
   });
   const total=subtotal+taxSum;
@@ -2722,7 +2726,7 @@ function viewDocumentDetails(docId) {
   const taxRow=document.getElementById('a4-summary-tax-row');
   if(taxSum>0){taxRow.style.display='flex';document.getElementById('a4-summary-tax').textContent=formatCurrencyCustom(taxSum,doc.currency||companyProfile.currency);}else{taxRow.style.display='none';}
   document.getElementById('a4-summary-total').textContent=formatCurrencyCustom(total,doc.currency||companyProfile.currency);
-  document.getElementById('a4-notes-content').textContent=doc.notes||companyProfile.defaultNotes;
+  document.getElementById('a4-notes-content').innerHTML=(doc.notes||companyProfile.defaultNotes||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
   applyInvoiceTemplateTheme();
   setTab('document-preview');
 }

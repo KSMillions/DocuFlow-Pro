@@ -295,9 +295,555 @@ svg.chart{width:100%;height:100%;overflow:visible;}
 .chevron{font-size:10px;color:var(--text3);margin-left:auto;}
 
 /* Print */
+/* ─── LANDING SCREEN & NAVIGATION ─── */
+.landing-screen {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow-y: auto;
+  background: #09090b;
+  color: var(--text);
+  scroll-behavior: smooth;
+  font-family: 'DM Sans', sans-serif;
+  z-index: 10;
+}
+.glow-blob {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  filter: blur(160px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.12;
+}
+.blob-1 {
+  background: radial-gradient(circle, var(--pink) 0%, rgba(255,182,193,0) 70%);
+  top: -10%;
+  left: -10%;
+  animation: float1 25s infinite alternate ease-in-out;
+}
+.blob-2 {
+  background: radial-gradient(circle, var(--blue) 0%, rgba(91,143,212,0) 70%);
+  bottom: 20%;
+  right: -5%;
+  animation: float2 30s infinite alternate ease-in-out;
+}
+@keyframes float1 {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(80px, 120px) scale(1.1); }
+  100% { transform: translate(-40px, 60px) scale(0.95); }
+}
+@keyframes float2 {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-100px, -60px) scale(0.9); }
+  100% { transform: translate(60px, -120px) scale(1.15); }
+}
+.landing-nav {
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 40px;
+  background: rgba(14, 14, 16, 0.7);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+.landing-logo-mark {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.landing-logo-badge {
+  width: 38px;
+  height: 38px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 182, 193, 0.25);
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(255, 182, 193, 0.06);
+}
+.landing-logo-badge img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+.landing-logo-text {
+  font-family: 'DM Serif Display', serif;
+  font-size: 18px;
+  color: var(--pink3);
+  line-height: 1.1;
+}
+.landing-logo-sub {
+  font-size: 9px;
+  color: var(--text3);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.landing-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.landing-nav-links a {
+  color: var(--text2);
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.landing-nav-links a:hover {
+  color: var(--pink);
+}
+.nav-btn-secondary {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 6px 14px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.02);
+}
+.nav-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+.nav-btn-primary {
+  background: linear-gradient(135deg, rgba(255, 182, 193, 0.15), rgba(255, 224, 225, 0.08));
+  border: 1px solid rgba(255, 182, 193, 0.35) !important;
+  color: var(--pink3) !important;
+  padding: 6px 16px;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(255, 182, 193, 0.08);
+}
+.nav-btn-primary:hover {
+  background: linear-gradient(135deg, rgba(255, 182, 193, 0.25), rgba(255, 224, 225, 0.15)) !important;
+  box-shadow: 0 0 20px rgba(255, 182, 193, 0.15);
+}
+
+/* ─── HERO SECTION ─── */
+.hero-section {
+  position: relative;
+  text-align: center;
+  padding: 110px 20px 90px;
+  z-index: 1;
+}
+.hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  background: rgba(255, 182, 193, 0.06);
+  border: 1px solid rgba(255, 182, 193, 0.15);
+  border-radius: 20px;
+  color: var(--pink);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+  box-shadow: 0 4px 20px rgba(255, 182, 193, 0.03);
+}
+.hero-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 56px;
+  color: var(--text);
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+}
+.hero-subtitle {
+  font-size: 16px;
+  color: var(--text2);
+  line-height: 1.6;
+  max-width: 620px;
+  margin: 24px auto 36px;
+}
+.hero-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+.btn-hero-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, rgba(255, 182, 193, 0.2), rgba(255, 224, 225, 0.1));
+  border: 1px solid rgba(255, 182, 193, 0.4);
+  color: var(--pink3);
+  padding: 12px 28px;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 25px rgba(255, 182, 193, 0.08);
+}
+.btn-hero-primary:hover {
+  background: linear-gradient(135deg, rgba(255, 182, 193, 0.3), rgba(255, 224, 225, 0.15));
+  box-shadow: 0 4px 30px rgba(255, 182, 193, 0.18);
+  transform: translateY(-1px);
+}
+.btn-hero-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(22, 22, 24, 0.4);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  padding: 12px 28px;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  backdrop-filter: blur(10px);
+}
+.btn-hero-secondary:hover {
+  border-color: var(--border2);
+  color: var(--text);
+  background: rgba(22, 22, 24, 0.6);
+  transform: translateY(-1px);
+}
+
+/* ─── FEATURES SECTION ─── */
+.landing-section-features {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 80px 20px;
+  position: relative;
+  z-index: 1;
+}
+.section-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+.section-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 36px;
+  color: var(--pink3);
+  margin-bottom: 12px;
+}
+.section-subtitle {
+  font-size: 14px;
+  color: var(--text2);
+  max-width: 550px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+.showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+@media (max-width: 900px) {
+  .showcase-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .showcase-grid { grid-template-columns: 1fr; }
+}
+.showcase-card {
+  background: rgba(22, 22, 24, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 28px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.showcase-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 182, 193, 0.25);
+  box-shadow: 0 12px 30px rgba(255, 182, 193, 0.04);
+}
+.card-icon {
+  font-size: 26px;
+  margin-bottom: 18px;
+}
+.showcase-card h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+.showcase-card p {
+  font-size: 12.5px;
+  color: var(--text2);
+  line-height: 1.5;
+}
+
+/* ─── SANDBOX SECTION ─── */
+.landing-section-sandbox {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 60px 20px 80px;
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+}
+.sandbox-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 30px;
+  background: rgba(22, 22, 24, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 20px;
+  padding: 30px;
+  backdrop-filter: blur(10px);
+}
+@media (max-width: 850px) {
+  .sandbox-layout { grid-template-columns: 1fr; }
+}
+.sandbox-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.sandbox-theme-selectors {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+}
+.sb-theme-btn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: 'DM Sans', sans-serif;
+}
+.sb-theme-btn:hover {
+  background: var(--border2);
+  color: var(--text);
+}
+.sb-theme-btn.active {
+  border-color: var(--pink);
+  background: rgba(255, 182, 193, 0.08);
+  color: var(--pink);
+  font-weight: 600;
+}
+.sandbox-preview {
+  background: rgba(9, 9, 11, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 480px;
+  overflow-x: auto;
+}
+.sandbox-sheet {
+  background: #ffffff;
+  color: #1c1c1f;
+  border-radius: 8px;
+  padding: 32px;
+  width: 100%;
+  max-width: 580px;
+  min-height: 420px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  font-size: 10px;
+  line-height: 1.5;
+  transition: all 0.3s ease;
+}
+.sandbox-sheet.tmpl-minimalist {
+  font-family: 'DM Sans', sans-serif;
+}
+.sandbox-sheet.tmpl-blush-luxury {
+  font-family: 'DM Sans', sans-serif;
+  border-top: 6px solid var(--pink);
+}
+.sandbox-sheet.tmpl-blush-luxury .sb-sheet-header h4 {
+  font-family: 'DM Serif Display', serif;
+  color: var(--pink);
+  font-size: 20px;
+}
+.sandbox-sheet.tmpl-blush-luxury .sb-sheet-sec-label {
+  color: #a86772;
+  border-bottom-color: var(--pink3);
+}
+.sandbox-sheet.tmpl-blush-luxury .sb-sheet-table th {
+  border-bottom-color: var(--pink);
+  color: #a86772;
+}
+.sandbox-sheet.tmpl-blush-luxury #sb-preview-grand-total-row {
+  border-top-color: var(--pink);
+  color: #a86772;
+}
+.sandbox-sheet.tmpl-modern-indigo {
+  font-family: 'DM Sans', sans-serif;
+}
+.sandbox-sheet.tmpl-modern-indigo .sb-sheet-header h4 {
+  color: #2F5496;
+}
+.sandbox-sheet.tmpl-modern-indigo .sb-sheet-sec-label {
+  border-bottom-color: #2F5496;
+  color: #2F5496;
+}
+.sandbox-sheet.tmpl-modern-indigo .sb-sheet-table th {
+  background: #eff2f9;
+  color: #2F5496;
+  border-bottom: none;
+}
+.sandbox-sheet.tmpl-modern-indigo #sb-preview-grand-total-row {
+  border-top-color: #2F5496;
+  color: #2F5496;
+}
+.sandbox-sheet.tmpl-emerald-clean {
+  font-family: 'DM Sans', sans-serif;
+}
+.sandbox-sheet.tmpl-emerald-clean .sb-sheet-header h4 {
+  color: #1a7a60;
+}
+.sandbox-sheet.tmpl-emerald-clean .sb-sheet-sec-label {
+  border-bottom-color: #1a7a60;
+  color: #1a7a60;
+}
+.sandbox-sheet.tmpl-emerald-clean .sb-sheet-table th {
+  border-bottom-color: #1a7a60;
+  color: #1a7a60;
+}
+.sandbox-sheet.tmpl-emerald-clean #sb-preview-grand-total-row {
+  border-top-color: #1a7a60;
+  color: #1a7a60;
+}
+.sb-sheet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+.sb-sheet-logo {
+  max-width: 100px;
+  max-height: 40px;
+  display: flex;
+  align-items: center;
+}
+.sb-sheet-logo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+.sb-sheet-meta {
+  text-align: right;
+}
+.sb-sheet-meta h4 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 2px;
+  letter-spacing: -0.5px;
+}
+.sb-sheet-bill-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+.sb-sheet-sec-label {
+  font-size: 8px;
+  text-transform: uppercase;
+  color: #888892;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid #e1e1e6;
+  padding-bottom: 2px;
+}
+.sb-sheet-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+.sb-sheet-table th {
+  font-size: 8px;
+  text-transform: uppercase;
+  color: #888892;
+  font-weight: 600;
+  padding: 6px;
+  border-bottom: 2px solid #e1e1e6;
+}
+.sb-sheet-table td {
+  padding: 6px;
+  border-bottom: 1px solid #efeff3;
+}
+.sb-sheet-summary-row {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ─── PORTAL SECTION ─── */
+.portal-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 20px 100px;
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+}
+@media (max-width: 800px) {
+  .portal-section { grid-template-columns: 1fr; }
+}
+.portal-card {
+  background: rgba(22, 22, 24, 0.6);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.portal-card-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px;
+  color: var(--pink3);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.portal-card-desc {
+  font-size: 12.5px;
+  color: var(--text2);
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+.su-req-success-msg {
+  font-size: 12.5px;
+  color: var(--green);
+  padding: 10px 14px;
+  background: rgba(74, 191, 168, 0.1);
+  border: 1px solid rgba(74, 191, 168, 0.2);
+  border-radius: 8px;
+  line-height: 1.4;
+}
+.landing-footer {
+  text-align: center;
+  padding: 40px 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+  background: rgba(9, 9, 11, 0.5);
+  position: relative;
+  z-index: 1;
+}
+
+/* Print */
 @media print {
   body, html {background:#fff !important;color:#000 !important;height:auto !important;overflow:visible !important;}
-  .shell,.topbar,.status-bar,.preview-toolbar,.toast-container,.modal-overlay,.auth-screen,.loading-screen,.onboarding-screen{display:none !important;}
+  .shell,.topbar,.status-bar,.preview-toolbar,.toast-container,.modal-overlay,.auth-screen,.loading-screen,.onboarding-screen,.landing-screen{display:none !important;}
   #view-document-preview{display:block !important;position:absolute !important;left:0 !important;top:0 !important;width:100% !important;}
   .invoice-a4{border:none !important;box-shadow:none !important;padding:0 !important;margin:0 !important;width:100% !important;min-height:0 !important;background:#fff !important;color:#000 !important;}
 }
@@ -312,39 +858,243 @@ svg.chart{width:100%;height:100%;overflow:visible;}
   <div class="loading-text">Connecting to DocuFlow Pro…</div>
 </div>
 
-<!-- AUTH SCREEN -->
-<div id="auth-screen" class="auth-screen" style="display:none;">
-  <div class="auth-card">
-    <div class="auth-logo-block">
-      <div class="auth-emblem">
-        <img src="favicon.png" alt="DocuFlow Pro">
+<!-- LANDING SCREEN -->
+<div id="landing-screen" class="landing-screen" style="display:none;">
+  <!-- Glow Blobs -->
+  <div class="glow-blob blob-1"></div>
+  <div class="glow-blob blob-2"></div>
+  
+  <!-- Navigation -->
+  <header class="landing-nav">
+    <div class="landing-logo-mark">
+      <div class="landing-logo-badge">
+        <img src="favicon.png" alt="DocuFlow Pro Logo">
       </div>
-      <span class="auth-brand">DocuFlow Pro</span>
-      <div class="auth-tagline">Enterprise Accounting Document Generator</div>
+      <div>
+        <div class="landing-logo-text">DocuFlow</div>
+        <div class="landing-logo-sub">Pro · Enterprise</div>
+      </div>
+    </div>
+    <nav class="landing-nav-links">
+      <a href="#features">Features</a>
+      <a href="#demo">Sandbox Demo</a>
+      <a href="#portal" class="nav-btn-secondary">Request Access</a>
+      <a href="#portal" class="nav-btn-primary">Sign In</a>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <div class="hero-badge"><i class="ti ti-sparkles"></i> High-Fidelity Accounting Document Suite</div>
+      <h1 class="hero-title">Automate your business documents in style.</h1>
+      <p class="hero-subtitle">Generate tax-compliant invoices, beautiful quotations, and structured purchase orders instantly. Complete with custom layouts, Word exporting, and cloud synchronisation.</p>
+      <div class="hero-buttons">
+        <a href="#portal" class="btn-hero-primary"><i class="ti ti-user-plus"></i> Request New Account</a>
+        <a href="#demo" class="btn-hero-secondary"><i class="ti ti-presentation"></i> Try the Sandbox</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="landing-section-features">
+    <div class="section-header">
+      <h2 class="section-title">Designed for Modern Workflows</h2>
+      <p class="section-subtitle">DocuFlow Pro integrates powerful features to handle client billing and vendor ordering in a single, high-fidelity space.</p>
+    </div>
+    <div class="showcase-grid">
+      <div class="showcase-card">
+        <div class="card-icon" style="color:var(--pink)"><i class="ti ti-receipt"></i></div>
+        <h3>Interactive Generator</h3>
+        <p>Real-time line computations, automated tax calculations, and currency toggles built for high speed operations.</p>
+      </div>
+      <div class="showcase-card">
+        <div class="card-icon" style="color:var(--blue)"><i class="ti ti-template"></i></div>
+        <h3>Bespoke Templates</h3>
+        <p>Choose from luxury serif, minimalist charcoal, modern indigo, or clean emerald layouts tailored to represent your company identity.</p>
+      </div>
+      <div class="showcase-card">
+        <div class="card-icon" style="color:var(--green)"><i class="ti ti-file-type-pdf"></i></div>
+        <h3>High-Fidelity Exports</h3>
+        <p>Export pixel-perfect PDF mockups and fully editable Microsoft Word documents with zero local package installations.</p>
+      </div>
+      <div class="showcase-card">
+        <div class="card-icon" style="color:var(--orange)"><i class="ti ti-chart-dots"></i></div>
+        <h3>Analytics & CRM</h3>
+        <p>Track client billing volumes, aging outstanding invoice thresholds, and coordinate vendor lists inside a secured cloud DB.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Sandbox Section -->
+  <section id="demo" class="landing-section-sandbox">
+    <div class="section-header">
+      <h2 class="section-title">Interactive Document Sandbox</h2>
+      <p class="section-subtitle">Experiment with the generator interface below. Select styling templates and watch the document render instantly.</p>
+    </div>
+    <div class="sandbox-layout">
+      <!-- Controls -->
+      <div class="sandbox-controls">
+        <div class="form-row">
+          <label class="form-label">Document Type</label>
+          <select id="sb-doc-type" class="form-select" onchange="updateSandboxDemo()">
+            <option value="INV">Invoice</option>
+            <option value="QT">Quotation</option>
+            <option value="PO">Purchase Order</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label class="form-label">Recipient / Client Name</label>
+          <input type="text" id="sb-client-name" class="form-input" value="Acme Industries Ltd" oninput="updateSandboxDemo()">
+        </div>
+        <div class="form-row">
+          <label class="form-label">Styling Theme</label>
+          <div class="sandbox-theme-selectors">
+            <button class="sb-theme-btn active" id="sb-theme-minimalist" onclick="setSandboxTheme('minimalist')">Minimalist</button>
+            <button class="sb-theme-btn" id="sb-theme-blush-luxury" onclick="setSandboxTheme('blush-luxury')">Blush Luxury</button>
+            <button class="sb-theme-btn" id="sb-theme-modern-indigo" onclick="setSandboxTheme('modern-indigo')">Modern Indigo</button>
+            <button class="sb-theme-btn" id="sb-theme-emerald-clean" onclick="setSandboxTheme('emerald-clean')">Emerald Clean</button>
+          </div>
+        </div>
+        <div class="form-row">
+          <label class="form-label">Sample Item Price (ZAR)</label>
+          <input type="number" id="sb-item-price" class="form-input" value="12500" oninput="updateSandboxDemo()">
+        </div>
+        <div style="font-size:11px;color:var(--text3);margin-top:12px;line-height:1.4;">
+          <i class="ti ti-info-circle"></i> This is a preview sandbox. Request access to upload your own logo, save invoices to the cloud, and print PDF copies.
+        </div>
+      </div>
+      
+      <!-- Mini Mock A4 Sheet -->
+      <div class="sandbox-preview">
+        <div class="sandbox-sheet tmpl-minimalist" id="sandbox-sheet">
+          <div class="sb-sheet-header">
+            <div class="sb-sheet-logo" id="sb-sheet-logo-placeholder">
+              <img src="favicon.png" alt="Speco Favicon">
+            </div>
+            <div class="sb-sheet-meta">
+              <h4 id="sb-preview-type">INVOICE</h4>
+              <div style="font-size:9px;color:#888892" id="sb-preview-number">INV-2026-0001</div>
+            </div>
+          </div>
+          
+          <div class="sb-sheet-bill-grid">
+            <div>
+              <div class="sb-sheet-sec-label">Company Details</div>
+              <div style="font-weight:600;">Speco Group Pro</div>
+              <div style="font-size:9.5px;color:#6b6b76">info@speco.co.za</div>
+            </div>
+            <div style="text-align:right;">
+              <div class="sb-sheet-sec-label" id="sb-preview-recipient-label">Bill To</div>
+              <div style="font-weight:600;" id="sb-preview-client">Acme Industries Ltd</div>
+            </div>
+          </div>
+          
+          <table class="sb-sheet-table">
+            <thead>
+              <tr>
+                <th style="text-align:left;">Description</th>
+                <th style="text-align:center;width:10%;">Qty</th>
+                <th style="text-align:right;width:20%;">Price</th>
+                <th style="text-align:right;width:20%;">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Enterprise Implementation Consulting</td>
+                <td style="text-align:center;">1</td>
+                <td style="text-align:right;" id="sb-preview-unit">R 12 500.00</td>
+                <td style="text-align:right;" id="sb-preview-total">R 12 500.00</td>
+              </tr>
+            </tbody>
+          </table>
+          
+          <div class="sb-sheet-summary-row">
+            <div style="width:140px;margin-left:auto;font-size:10px;">
+              <div style="display:flex;justify-content:space-between;padding:2px 0;">
+                <span>Subtotal:</span>
+                <span id="sb-preview-subtotal">R 12 500.00</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:2px 0;color:#6b6b76;">
+                <span>VAT (15%):</span>
+                <span id="sb-preview-vat">R 1 875.00</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:4px 0;font-weight:700;border-top:1px solid #e1e1e6;font-size:11px;" id="sb-preview-grand-total-row">
+                <span>Total Due:</span>
+                <span id="sb-preview-grand-total">R 14 375.00</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Portal Section (Request Access & Existing Client Sign-in) -->
+  <section id="portal" class="portal-section">
+    <!-- Request Access Card -->
+    <div class="portal-card">
+      <h3 class="portal-card-title"><i class="ti ti-user-plus" style="color:var(--pink)"></i> Request Account Access</h3>
+      <p class="portal-card-desc">Enter your business details below. A system administrator at Speco Group will create your account credentials and get in touch with your sign-in details.</p>
+      
+      <form id="signup-request-form" onsubmit="handleSignUpRequest(event)">
+        <div class="auth-field">
+          <label class="auth-label">Full Name</label>
+          <input type="text" name="name" class="auth-input" placeholder="e.g. John Doe" required>
+        </div>
+        <div class="auth-field" style="margin-top:12px;">
+          <label class="auth-label">Company Name</label>
+          <input type="text" name="company" class="auth-input" placeholder="e.g. Acme Services Pty Ltd" required>
+        </div>
+        <div class="auth-field" style="margin-top:12px;">
+          <label class="auth-label">Email Address</label>
+          <input type="email" name="email" class="auth-input" placeholder="you@company.com" required>
+        </div>
+        <div class="auth-field" style="margin-top:12px;">
+          <label class="auth-label">Contact Number</label>
+          <input type="text" name="phone" class="auth-input" placeholder="e.g. +27 11 555 1234" required>
+        </div>
+        
+        <div id="su-req-msg" class="su-req-success-msg" style="display:none;margin-top:14px;"></div>
+        
+        <button type="submit" class="auth-btn-primary" id="su-req-btn" style="margin-top:20px;width:100%;">
+          <i class="ti ti-mail-forward" style="margin-right:6px"></i>Send Access Request
+        </button>
+      </form>
     </div>
 
-    <!-- SIGN IN FORM -->
-    <div id="form-signin">
+    <!-- Existing Customer Sign In Card -->
+    <div class="portal-card">
+      <h3 class="portal-card-title"><i class="ti ti-lock" style="color:var(--green)"></i> Existing Customer Portal</h3>
+      <p class="portal-card-desc">Already have a DocuFlow Pro account created by the admin? Sign in below to load your configurations and continue generating documents.</p>
+      
       <div class="auth-form">
         <div class="auth-field">
           <label class="auth-label">Email Address</label>
           <input type="email" class="auth-input" id="si-email" placeholder="your@email.com" autocomplete="email">
         </div>
-        <div class="auth-field">
+        <div class="auth-field" style="margin-top:12px;">
           <label class="auth-label">Password</label>
           <input type="password" class="auth-input" id="si-password" placeholder="••••••••" autocomplete="current-password">
         </div>
-        <div class="auth-error" id="si-error"></div>
-        <button class="auth-btn-primary" id="si-btn" onclick="handleSignIn()">
+        <div class="auth-error" id="si-error" style="margin-top:10px;"></div>
+        <button class="auth-btn-primary" id="si-btn" style="margin-top:20px;width:100%;" onclick="handleSignIn()">
           <i class="ti ti-login" style="margin-right:6px"></i>Sign In to Dashboard
         </button>
       </div>
     </div>
+  </section>
 
-    <div class="auth-footer">
-      Secured by Supabase · DocuFlow Pro v3.0 · Cloud Edition
+  <!-- Footer -->
+  <footer class="landing-footer">
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px;">
+      <img src="favicon.png" alt="Speco Group Logo" style="width:20px;height:20px;object-fit:contain;">
+      <span style="font-family:'DM Serif Display',serif;font-size:15px;color:var(--pink3);">DocuFlow Pro</span>
     </div>
-  </div>
+    <div style="font-size:11px;color:var(--text3);">
+      © 2026 Speco Group. All rights reserved. Secured by Supabase.
+    </div>
+  </footer>
 </div>
 
 <!-- TOAST CONTAINER -->
@@ -879,13 +1629,17 @@ const months = ['Jan','Feb','Mar','Apr','May','Jun'];
 //  BOOT — AUTH STATE LISTENER
 // ══════════════════════════════════════════
 window.addEventListener('load', async () => {
+  // Initialize sandbox demo once
+  if (document.getElementById('landing-screen')) {
+    updateSandboxDemo();
+  }
   sb.auth.onAuthStateChange(async (event, session) => {
     if(session && session.user) {
       currentUser = session.user;
       await bootstrapApp();
     } else {
       currentUser = null;
-      showScreen('auth');
+      showScreen('landing');
     }
   });
 });
@@ -904,15 +1658,98 @@ async function bootstrapApp() {
   } catch(err) {
     console.error('Bootstrap error', err);
     showToast('Failed to load your data — please refresh.', 'error');
-    showScreen('auth');
+    showScreen('landing');
   }
 }
 
 function showScreen(name) {
   document.getElementById('loading-screen').style.display = name==='loading' ? 'flex' : 'none';
-  document.getElementById('auth-screen').style.display = name==='auth' ? 'flex' : 'none';
+  document.getElementById('landing-screen').style.display = name==='landing' ? 'block' : 'none';
   document.getElementById('onboarding-screen').style.display = name==='onboarding' ? 'flex' : 'none';
   document.getElementById('app-shell').style.display = name==='app' ? 'flex' : 'none';
+}
+
+// ══════════════════════════════════════════
+//  LANDING PAGE LOGIC (SANDBOX & SIGNUP)
+// ══════════════════════════════════════════
+let sandboxTheme = 'minimalist';
+
+function setSandboxTheme(themeName) {
+  sandboxTheme = themeName;
+  document.querySelectorAll('.sb-theme-btn').forEach(btn => btn.classList.remove('active'));
+  document.getElementById('sb-theme-' + themeName).classList.add('active');
+  
+  const sheet = document.getElementById('sandbox-sheet');
+  sheet.className = 'sandbox-sheet';
+  sheet.classList.add('tmpl-' + themeName);
+}
+
+function updateSandboxDemo() {
+  const typeCode = document.getElementById('sb-doc-type').value;
+  const clientName = document.getElementById('sb-client-name').value.trim() || 'Acme Industries Ltd';
+  const price = parseFloat(document.getElementById('sb-item-price').value) || 0;
+  
+  const typeLabels = { INV: 'INVOICE', QT: 'QUOTATION', PO: 'PURCHASE ORDER' };
+  document.getElementById('sb-preview-type').textContent = typeLabels[typeCode] || 'INVOICE';
+  document.getElementById('sb-preview-number').textContent = `${typeCode}-2026-0001`;
+  document.getElementById('sb-preview-recipient-label').textContent = typeCode === 'PO' ? 'Order Vendor' : 'Bill To';
+  document.getElementById('sb-preview-client').textContent = clientName;
+  
+  const subtotal = price;
+  const vat = price * 0.15;
+  const total = subtotal + vat;
+  
+  const formatter = (val) => 'R ' + val.toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  
+  document.getElementById('sb-preview-unit').textContent = formatter(price);
+  document.getElementById('sb-preview-total').textContent = formatter(price);
+  document.getElementById('sb-preview-subtotal').textContent = formatter(subtotal);
+  document.getElementById('sb-preview-vat').textContent = formatter(vat);
+  document.getElementById('sb-preview-grand-total').textContent = formatter(total);
+}
+
+async function handleSignUpRequest(event) {
+  event.preventDefault();
+  const form = event.target;
+  const btn = document.getElementById('su-req-btn');
+  const msg = document.getElementById('su-req-msg');
+  
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader" style="margin-right:6px; animation: spin 1s infinite linear; display: inline-block;"></i>Sending Request...';
+  
+  const formData = new FormData(form);
+  
+  const plainData = {
+    Name: formData.get('name'),
+    Company: formData.get('company'),
+    Email: formData.get('email'),
+    Phone: formData.get('phone'),
+    Message: 'Please create my DocuFlow login details.'
+  };
+
+  try {
+    const response = await fetch("https://formsubmit.co/ajax/info@speco.co.za", {
+      method: "POST",
+      body: JSON.stringify(plainData),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
+    });
+    if (response.ok) {
+      showToast('Sign up request sent successfully!', 'success');
+      form.reset();
+      msg.style.display = 'block';
+      msg.textContent = 'Thank you! Your access request has been sent to Speco Group. We will review and contact you once your account credentials are ready.';
+    } else {
+      throw new Error('Response failed');
+    }
+  } catch (err) {
+    showToast('Failed to send request. Please try again or email info@speco.co.za directly.', 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="ti ti-mail-forward" style="margin-right:6px"></i>Send Access Request';
+  }
 }
 
 // ══════════════════════════════════════════

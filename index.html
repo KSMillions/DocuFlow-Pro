@@ -1122,6 +1122,107 @@ svg.chart{width:100%;height:100%;overflow:visible;}
   #view-document-preview{display:block !important;position:absolute !important;left:0 !important;top:0 !important;width:100% !important;}
   .invoice-a4{border:none !important;box-shadow:none !important;padding:0 !important;margin:0 !important;width:100% !important;min-height:0 !important;background:#fff !important;color:#000 !important;}
 }
+
+/* ══════════════════════════════════════════
+   SUBSCRIPTION SYSTEM
+   ══════════════════════════════════════════ */
+
+/* Upgrade wall — shown inside gated tab views for Free plan users */
+.upgrade-wall {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 380px;
+  text-align: center;
+  padding: 40px 24px;
+  animation: fadeIn .3s ease;
+}
+.upgrade-wall-icon {
+  width: 72px; height: 72px;
+  background: rgba(255,182,193,0.07);
+  border: 1px solid rgba(255,182,193,0.18);
+  border-radius: 18px;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 22px;
+}
+.upgrade-wall h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 24px;
+  color: var(--pink3);
+  margin-bottom: 10px;
+}
+.upgrade-wall p {
+  font-size: 13px;
+  color: var(--text2);
+  max-width: 420px;
+  line-height: 1.6;
+  margin-bottom: 26px;
+}
+.upgrade-wall-btns { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+
+/* Subscription status widget (dashboard, paid/pro users) */
+.sub-widget {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius2);
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  animation: fadeIn .3s ease;
+}
+.sub-widget-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.sub-widget-stat { display: flex; flex-direction: column; gap: 2px; }
+.sub-widget-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: .4px; }
+.sub-widget-value { font-size: 13px; font-weight: 600; }
+.sub-divider { width: 1px; height: 28px; background: var(--border); flex-shrink: 0; }
+.usage-bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; margin-top: 5px; width: 110px; }
+.usage-bar-fill { height: 100%; border-radius: 2px; transition: width .4s ease; }
+
+/* Pricing page */
+.pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; max-width: 900px; margin: 0 auto; }
+@media (max-width: 680px) { .pricing-grid { grid-template-columns: 1fr; } }
+.pricing-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  position: relative;
+  transition: border-color .2s, transform .2s;
+}
+.pricing-card:hover { transform: translateY(-2px); border-color: var(--border2); }
+.pricing-card.featured { background: rgba(255,182,193,0.025); }
+.pricing-card.active-plan { border-width: 2px; }
+.pricing-badge {
+  position: absolute;
+  top: -11px; left: 50%; transform: translateX(-50%);
+  font-size: 10px; font-weight: 700;
+  padding: 3px 12px;
+  border-radius: 10px;
+  letter-spacing: .4px;
+  white-space: nowrap;
+}
+.pricing-plan-name { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .6px; margin-bottom: 6px; }
+.pricing-amount { font-family: 'DM Serif Display', serif; font-size: 36px; color: var(--text); font-weight: 700; line-height: 1; }
+.pricing-period { font-size: 12px; color: var(--text3); }
+.pricing-desc { font-size: 12px; color: var(--text2); line-height: 1.45; margin: 10px 0 14px; }
+.pricing-divider { height: 1px; background: var(--border); margin-bottom: 14px; }
+.pricing-features { display: flex; flex-direction: column; gap: 7px; margin-bottom: 20px; }
+.pricing-feat { display: flex; align-items: flex-start; gap: 7px; font-size: 12px; color: var(--text2); line-height: 1.3; }
+.pricing-feat.disabled { color: var(--text3); }
+.pricing-feat i { flex-shrink: 0; margin-top: 1px; }
+
+/* Admin panel */
+.admin-stats-bar { display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
+
+/* Doc limit modal */
+.limit-icon {
+  width: 56px; height: 56px;
+  background: rgba(232,87,74,.1);
+  border: 1px solid rgba(232,87,74,.2);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+}
 </style>
 </head>
 <body>
@@ -1479,6 +1580,8 @@ svg.chart{width:100%;height:100%;overflow:visible;}
         <div class="nav-label">Platform</div>
         <div class="nav-item" id="nav-templates" onclick="setTab('templates')"><span class="icon"><i class="ti ti-template"></i></span>Templates</div>
         <div class="nav-item" id="nav-settings" onclick="setTab('settings')"><span class="icon"><i class="ti ti-settings"></i></span>Settings</div>
+        <div class="nav-item" id="nav-pricing" onclick="setTab('pricing')"><span class="icon"><i class="ti ti-credit-card"></i></span>Pricing</div>
+        <div class="nav-item" id="nav-admin" onclick="setTab('admin')" style="display:none"><span class="icon"><i class="ti ti-shield-check"></i></span>Admin Panel</div>
       </div>
     </nav>
     <div class="sidebar-footer">
@@ -1489,6 +1592,7 @@ svg.chart{width:100%;height:100%;overflow:visible;}
           <div class="user-role" id="sidebar-user-email">Company Profile</div>
         </div>
       </div>
+      <div id="sidebar-plan-badge-container" style="padding:0 8px 6px;"></div>
       <button class="sign-out-btn" onclick="handleSignOut()"><i class="ti ti-logout"></i> Sign Out</button>
     </div>
   </aside>
@@ -1508,6 +1612,20 @@ svg.chart{width:100%;height:100%;overflow:visible;}
 
       <!-- 1. DASHBOARD -->
       <div id="view-dashboard" class="tab-view show">
+        <!-- Upgrade wall: shown for Free plan users -->
+        <div class="upgrade-wall" id="dashboard-upgrade-wall">
+          <div class="upgrade-wall-icon"><i class="ti ti-layout-dashboard" style="font-size:32px;color:var(--pink)"></i></div>
+          <h2>Executive Dashboard</h2>
+          <p>The full analytics dashboard with KPI metrics, revenue charts, and business insights is available on Paid and Pro plans.</p>
+          <div class="upgrade-wall-btns">
+            <button class="btn" style="padding:10px 22px;font-size:12px;border-color:rgba(91,143,212,.3);color:var(--blue)" onclick="openUpgradeModal('paid')"><i class="ti ti-crown"></i> Upgrade to Paid — R55/mo</button>
+            <button class="btn btn-gold" style="padding:10px 22px;font-size:12px;" onclick="openUpgradeModal('pro')"><i class="ti ti-rocket"></i> Upgrade to Pro — R80/mo</button>
+          </div>
+        </div>
+        <!-- Subscription status widget (paid/pro users) -->
+        <div class="sub-widget" id="subscription-widget" style="display:none;"></div>
+        <!-- Main dashboard content wrapper -->
+        <div id="dashboard-main-content">
         <div class="kpi-grid">
           <div class="kpi-card" style="--accent-line:var(--pink)">
             <div class="kpi-label">Total Revenue</div>
@@ -1574,10 +1692,23 @@ svg.chart{width:100%;height:100%;overflow:visible;}
             </div>
           </div>
         </div>
+      </div><!-- /dashboard-main-content -->
       </div>
 
       <!-- 2. ANALYTICS -->
       <div id="view-analytics" class="tab-view">
+        <!-- Analytics upgrade wall for Free plan users -->
+        <div class="upgrade-wall" id="analytics-upgrade-wall">
+          <div class="upgrade-wall-icon" style="background:rgba(91,143,212,0.08);border-color:rgba(91,143,212,0.18);"><i class="ti ti-chart-bar" style="font-size:32px;color:var(--blue)"></i></div>
+          <h2 style="color:var(--pink3);">Analytics Dashboard</h2>
+          <p>Detailed financial reports, revenue trends, and client insights are available on Paid and Pro plans.</p>
+          <div class="upgrade-wall-btns">
+            <button class="btn" style="padding:10px 22px;font-size:12px;border-color:rgba(91,143,212,.3);color:var(--blue)" onclick="openUpgradeModal('paid')"><i class="ti ti-crown"></i> Upgrade to Paid — R55/mo</button>
+            <button class="btn btn-gold" style="padding:10px 22px;font-size:12px;" onclick="openUpgradeModal('pro')"><i class="ti ti-rocket"></i> Upgrade to Pro — R80/mo</button>
+          </div>
+        </div>
+        <!-- Analytics content wrapper -->
+        <div id="analytics-main-content">
         <div class="card">
           <div class="card-header">
             <div><div class="card-title">Detailed Financial Summary</div><div class="card-sub">Invoiced vs Expenses</div></div>
@@ -1605,6 +1736,7 @@ svg.chart{width:100%;height:100%;overflow:visible;}
             </div>
           </div>
         </div>
+        </div><!-- /analytics-main-content -->
       </div>
 
       <!-- 3. NOTIFICATIONS -->
@@ -1735,7 +1867,36 @@ svg.chart{width:100%;height:100%;overflow:visible;}
         </div>
       </div>
 
-      <!-- 12. DOCUMENT EDITOR -->
+      <!-- 12. PRICING PAGE -->
+      <div id="view-pricing" class="tab-view">
+        <div class="card">
+          <div class="card-header">
+            <div><div class="card-title">Subscription Plans</div><div class="card-sub">Choose the right plan for your growing business</div></div>
+          </div>
+          <div id="pricing-page-content" style="padding:10px 0 24px;"></div>
+        </div>
+      </div>
+
+      <!-- 13. ADMIN PANEL -->
+      <div id="view-admin" class="tab-view">
+        <div class="card">
+          <div class="card-header">
+            <div><div class="card-title">Admin — Upgrade Requests</div><div class="card-sub">Review and approve subscription plan upgrades</div></div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <select class="form-select" id="admin-filter" style="width:130px;" onchange="renderAdminPanel()">
+                <option value="all">All Requests</option>
+                <option value="pending">Pending</option>
+                <option value="approved">Approved</option>
+                <option value="rejected">Rejected</option>
+              </select>
+              <button class="btn" onclick="renderAdminPanel()"><i class="ti ti-refresh"></i> Refresh</button>
+            </div>
+          </div>
+          <div id="admin-requests-container" style="min-height:120px;"></div>
+        </div>
+      </div>
+
+      <!-- 14. DOCUMENT EDITOR -->
       <div id="view-document-editor" class="tab-view">
         <div class="card">
           <div class="card-header">
@@ -1884,6 +2045,41 @@ svg.chart{width:100%;height:100%;overflow:visible;}
   </div>
 </div>
 
+<!-- UPGRADE REQUEST MODAL -->
+<div class="modal-overlay" id="upgrade-modal" onclick="if(event.target===this)closeUpgradeModal()">
+  <div class="modal" style="width:520px;max-width:96vw;">
+    <div class="modal-title">Request Plan Upgrade</div>
+    <div style="font-size:13px;color:var(--text2);margin:-4px 0 18px;">
+      <span id="upgrade-modal-plan-badge" style="font-weight:600;color:var(--pink)">Paid Plan — R55/month</span>
+      <span> — Fill in your details and our team will activate your upgrade shortly.</span>
+    </div>
+    <input type="hidden" id="upgrade-desired-plan" value="paid">
+    <div class="form-row"><div class="form-label">Full Name</div><input type="text" class="form-input" id="upgrade-full-name" placeholder="Your full name"></div>
+    <div class="form-row"><div class="form-label">Email Address</div><input type="email" class="form-input" id="upgrade-email" placeholder="you@company.com"></div>
+    <div class="form-row"><div class="form-label">Company Name <span style="font-weight:400;text-transform:none;font-size:10px;">(optional)</span></div><input type="text" class="form-input" id="upgrade-company" placeholder="Your company name"></div>
+    <div class="form-row"><div class="form-label">Phone Number <span style="font-weight:400;text-transform:none;font-size:10px;">(optional)</span></div><input type="tel" class="form-input" id="upgrade-phone" placeholder="+27 11 555 1234"></div>
+    <div class="form-row"><div class="form-label">Additional Notes <span style="font-weight:400;text-transform:none;font-size:10px;">(optional)</span></div><textarea class="form-textarea" rows="2" id="upgrade-notes" placeholder="Any additional information…"></textarea></div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeUpgradeModal()">Cancel</button>
+      <button class="btn btn-gold" id="upgrade-submit-btn" onclick="submitUpgradeRequest()"><i class="ti ti-send"></i> Submit Upgrade Request</button>
+    </div>
+  </div>
+</div>
+
+<!-- DOCUMENT LIMIT MODAL -->
+<div class="modal-overlay" id="doc-limit-modal" onclick="if(event.target===this)document.getElementById('doc-limit-modal').classList.remove('show')">
+  <div class="modal" style="max-width:440px;text-align:center;">
+    <div class="limit-icon"><i class="ti ti-alert-triangle" style="font-size:26px;color:var(--red)"></i></div>
+    <div class="modal-title" style="font-size:18px;">Document Limit Reached</div>
+    <p id="doc-limit-msg" style="font-size:13px;color:var(--text2);margin:10px 0 24px;line-height:1.6;"></p>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+      <button class="btn" id="doc-limit-upgrade-paid" style="border-color:rgba(91,143,212,.3);color:var(--blue)" onclick="document.getElementById('doc-limit-modal').classList.remove('show');openUpgradeModal('paid')"><i class="ti ti-crown"></i> Upgrade to Paid</button>
+      <button class="btn btn-gold" id="doc-limit-upgrade-pro" onclick="document.getElementById('doc-limit-modal').classList.remove('show');openUpgradeModal('pro')"><i class="ti ti-rocket"></i> Upgrade to Pro</button>
+    </div>
+    <button class="btn" style="margin-top:14px;width:100%;opacity:.65;" onclick="document.getElementById('doc-limit-modal').classList.remove('show')">Maybe Later</button>
+  </div>
+</div>
+
 <script>
 // ══════════════════════════════════════════
 //  SUPABASE CLIENT INIT
@@ -1905,6 +2101,331 @@ let notifications = [];
 let activity = [];
 const revData = [62000, 87000, 74000, 103000, 91000, 142000];
 const months = ['Jan','Feb','Mar','Apr','May','Jun'];
+
+// ══════════════════════════════════════════
+//  SUBSCRIPTION SYSTEM
+// ══════════════════════════════════════════
+const ADMIN_EMAIL = 'info@speco.co.za'; // ← Change this to your admin email
+
+let userProfile = null;  // Loaded from user_profiles table
+let planConfig  = null;  // Loaded from plans table
+
+async function loadUserProfile() {
+  if(!currentUser) return;
+  try {
+    const { data, error } = await sb.from('user_profiles').select('*').eq('id', currentUser.id).maybeSingle();
+    if(!error && data) { userProfile = data; return; }
+    // Profile missing — create it (fallback for existing users created before trigger)
+    const { data: newProfile, error: upsertErr } = await sb.from('user_profiles').upsert({
+      id: currentUser.id, email: currentUser.email,
+      full_name: currentUser.user_metadata?.full_name || '',
+      plan_type: 'free', document_count: 0,
+      document_reset_date: new Date().toISOString(), subscription_status: 'active',
+      created_at: new Date().toISOString()
+    }, { onConflict: 'id' }).select().single();
+    userProfile = (!upsertErr && newProfile) ? newProfile
+      : { plan_type:'free', document_count:0, subscription_status:'active', document_reset_date: new Date().toISOString() };
+  } catch(err) {
+    console.warn('loadUserProfile:', err.message);
+    userProfile = { plan_type:'free', document_count:0, subscription_status:'active', document_reset_date: new Date().toISOString() };
+  }
+}
+
+async function loadPlanConfig() {
+  if(!userProfile) { planConfig = getFallbackPlan('free'); return; }
+  try {
+    const { data, error } = await sb.from('plans').select('*').eq('id', userProfile.plan_type || 'free').maybeSingle();
+    if(!error && data) { planConfig = data; return; }
+  } catch(_) {}
+  planConfig = getFallbackPlan(userProfile?.plan_type || 'free');
+}
+
+function getFallbackPlan(planId) {
+  const defs = {
+    free:  { id:'free',  name:'Free Plan',  monthly_price:0,    daily_document_limit:3,    analytics_enabled:false, dashboard_enabled:false, unlimited_documents:false },
+    paid:  { id:'paid',  name:'Paid Plan',  monthly_price:5500, daily_document_limit:10,   analytics_enabled:true,  dashboard_enabled:true,  unlimited_documents:false },
+    pro:   { id:'pro',   name:'Pro Plan',   monthly_price:8000, daily_document_limit:null, analytics_enabled:true,  dashboard_enabled:true,  unlimited_documents:true  }
+  };
+  return defs[planId] || defs.free;
+}
+
+async function checkAndResetDocCount() {
+  if(!userProfile || !currentUser) return;
+  try {
+    const hoursDiff = (Date.now() - new Date(userProfile.document_reset_date || 0).getTime()) / 3600000;
+    if(hoursDiff >= 24) {
+      const now = new Date().toISOString();
+      const { error } = await sb.from('user_profiles').update({ document_count:0, document_reset_date:now }).eq('id', currentUser.id);
+      if(!error) { userProfile.document_count = 0; userProfile.document_reset_date = now; }
+    }
+  } catch(_) {}
+}
+
+function canGenerateDocument() {
+  if(!userProfile || !planConfig) return true; // fail-open
+  if(planConfig.unlimited_documents) return true;
+  return (userProfile.document_count || 0) < (planConfig.daily_document_limit || 3);
+}
+
+async function incrementDocumentCount() {
+  if(!userProfile || !currentUser || planConfig?.unlimited_documents) return;
+  const newCount = (userProfile.document_count || 0) + 1;
+  try {
+    const { error } = await sb.from('user_profiles').update({ document_count: newCount }).eq('id', currentUser.id);
+    if(!error) { userProfile.document_count = newCount; renderSubscriptionWidget(); updateSidebarPlanBadge(); }
+  } catch(_) {}
+}
+
+function showDocLimitModal() {
+  const modal = document.getElementById('doc-limit-modal');
+  if(!modal) return;
+  modal.classList.add('show');
+  const plan  = userProfile?.plan_type || 'free';
+  const limit = planConfig?.daily_document_limit || 3;
+  const msgEl = document.getElementById('doc-limit-msg');
+  if(msgEl) msgEl.textContent = plan === 'free'
+    ? `You have reached your Free Plan limit of ${limit} documents in a 24-hour period. Upgrade to continue generating documents.`
+    : `You have reached your ${limit}-document daily allowance. Upgrade to Pro for unlimited document generation.`;
+  const paidBtn = document.getElementById('doc-limit-upgrade-paid');
+  const proBtn  = document.getElementById('doc-limit-upgrade-pro');
+  if(paidBtn) paidBtn.style.display = plan === 'free' ? 'inline-flex' : 'none';
+  if(proBtn)  proBtn.style.display  = plan !== 'pro'  ? 'inline-flex' : 'none';
+}
+
+function applyDashboardGating() {
+  const isGated = !planConfig || !planConfig.dashboard_enabled;
+  const wall    = document.getElementById('dashboard-upgrade-wall');
+  const content = document.getElementById('dashboard-main-content');
+  const widget  = document.getElementById('subscription-widget');
+  if(wall)    wall.style.display    = isGated ? 'flex' : 'none';
+  if(content) content.style.display = isGated ? 'none' : '';
+  if(!isGated) renderSubscriptionWidget();
+  else if(widget) widget.style.display = 'none';
+}
+
+function applyAnalyticsGating() {
+  const isGated = !planConfig || !planConfig.analytics_enabled;
+  const wall    = document.getElementById('analytics-upgrade-wall');
+  const content = document.getElementById('analytics-main-content');
+  if(wall)    wall.style.display    = isGated ? 'flex' : 'none';
+  if(content) content.style.display = isGated ? 'none' : '';
+}
+
+function renderSubscriptionWidget() {
+  const widget = document.getElementById('subscription-widget');
+  if(!widget || !userProfile || !planConfig) return;
+  if(userProfile.plan_type === 'free') { widget.style.display = 'none'; return; }
+  const planColors = { free:'var(--text3)', paid:'var(--blue)', pro:'var(--pink)' };
+  const planIcons  = { free:'ti-user', paid:'ti-crown', pro:'ti-rocket' };
+  const color  = planColors[userProfile.plan_type] || 'var(--text3)';
+  const icon   = planIcons[userProfile.plan_type]  || 'ti-user';
+  const limit  = planConfig.daily_document_limit;
+  const used   = userProfile.document_count || 0;
+  const usageTxt = planConfig.unlimited_documents ? 'Unlimited' : `${used} / ${limit}`;
+  const usagePct = planConfig.unlimited_documents ? 100 : Math.min((used/(limit||3))*100, 100);
+  const stColors = { active:'var(--green)', pending:'var(--orange)', inactive:'var(--red)' };
+  const stColor  = stColors[userProfile.subscription_status] || 'var(--text3)';
+  widget.style.display = 'block';
+  widget.innerHTML = `
+    <div class="sub-widget-row">
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="width:30px;height:30px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="ti ${icon}" style="color:${color};font-size:15px;"></i></div>
+          <div class="sub-widget-stat"><div class="sub-widget-label">Current Plan</div><div class="sub-widget-value" style="color:${color}">${planConfig.name}</div></div>
+        </div>
+        <div class="sub-divider"></div>
+        <div class="sub-widget-stat">
+          <div class="sub-widget-label">Status</div>
+          <div class="sub-widget-value" style="color:${stColor};text-transform:capitalize;">${userProfile.subscription_status||'active'}</div>
+        </div>
+        <div class="sub-divider"></div>
+        <div class="sub-widget-stat" style="min-width:130px;">
+          <div style="display:flex;justify-content:space-between;"><div class="sub-widget-label">Docs Used (24h)</div><div class="sub-widget-label">${usageTxt}</div></div>
+          ${planConfig.unlimited_documents
+            ? `<div style="font-size:11px;color:var(--green);margin-top:4px;">♾️ No daily limit</div>`
+            : `<div class="usage-bar"><div class="usage-bar-fill" style="width:${usagePct}%;background:${usagePct>=100?'var(--red)':usagePct>=70?'var(--orange)':'var(--green)'}"></div></div>`
+          }
+        </div>
+      </div>
+      ${userProfile.plan_type!=='pro'
+        ? `<button class="btn" style="font-size:11px;border-color:rgba(255,182,193,0.25);color:var(--pink);white-space:nowrap;" onclick="setTab('pricing')"><i class="ti ti-arrow-up-circle"></i> Upgrade Plan</button>`
+        : `<div style="font-size:11px;color:var(--text3);display:flex;align-items:center;gap:4px;"><i class="ti ti-check" style="color:var(--green)"></i>All features unlocked</div>`
+      }
+    </div>
+  `;
+}
+
+function updateSidebarPlanBadge() {
+  const container = document.getElementById('sidebar-plan-badge-container');
+  if(!container || !userProfile) return;
+  const planColors = { free:'#6B6760', paid:'var(--blue)', pro:'var(--pink)' };
+  const planIcons  = { free:'ti-user', paid:'ti-crown', pro:'ti-rocket' };
+  const color = planColors[userProfile.plan_type] || '#6B6760';
+  const icon  = planIcons[userProfile.plan_type]  || 'ti-user';
+  const name  = (userProfile.plan_type || 'free').toUpperCase();
+  container.innerHTML = `<div style="display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;letter-spacing:.3px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);color:${color};"><i class="ti ${icon}"></i>${name} PLAN</div>`;
+}
+
+function updateAdminNavVisibility() {
+  const adminNav = document.getElementById('nav-admin');
+  if(adminNav) adminNav.style.display = (currentUser?.email === ADMIN_EMAIL) ? 'flex' : 'none';
+}
+
+function renderPricingPage() {
+  const container = document.getElementById('pricing-page-content');
+  if(!container) return;
+  const currentPlan = userProfile?.plan_type || 'free';
+  const plans = [
+    { id:'free', name:'Free', price:'R0', period:'/month', color:'var(--text3)',
+      desc:'Get started with essential document generation at no cost.',
+      features:['3 Documents per 24 Hours','PDF & Word Export','Customer & Supplier CRM','Invoices, Quotes, POs & More'],
+      limitations:['No Analytics Dashboard','No Business Insights','No Advanced Reporting'] },
+    { id:'paid', name:'Paid', price:'R55', period:'/month', color:'var(--blue)', badge:'Popular',
+      desc:'Unlock analytics and generate up to 10 documents daily.',
+      features:['10 Documents per 24 Hours','Full Analytics Dashboard','Business Insights & Metrics','Revenue & Financial Reporting','Document Statistics','PDF & Word Export'],
+      limitations:['Unlimited generation unavailable'] },
+    { id:'pro', name:'Pro', price:'R80', period:'/month', color:'var(--pink)', badge:'Best Value',
+      desc:'Unlimited power for established and growing businesses.',
+      features:['Unlimited Document Generation','Full Analytics Suite','Dashboard & KPI Access','Business Insights & Metrics','Historical Analytics','All Future Premium Features'],
+      limitations:[] }
+  ];
+  container.innerHTML = `
+    <div style="text-align:center;margin-bottom:32px;">
+      <p style="font-size:13px;color:var(--text2);max-width:480px;margin:0 auto;line-height:1.55;">Upgrade requests are manually processed by the Speco Group team. You'll receive confirmation once your plan is activated.</p>
+    </div>
+    <div class="pricing-grid">
+      ${plans.map(p=>{
+        const isActive = currentPlan===p.id;
+        const btnLabel = isActive ? '<i class="ti ti-check"></i> Current Plan' : (p.id==='free'&&!isActive ? 'Downgrade' : 'Request Upgrade');
+        const btnAction = isActive||p.id==='free' ? '' : `onclick="openUpgradeModal('${p.id}')"`;
+        return `<div class="pricing-card${isActive?' active-plan':''}${p.id==='pro'?' featured':''}" style="border-color:${isActive?p.color:'var(--border)'}">
+          ${p.badge?`<div class="pricing-badge" style="background:${p.id==='paid'?'rgba(91,143,212,0.12)':'rgba(255,182,193,0.1)'};color:${p.color};border:1px solid ${p.color}33;">${p.badge}</div>`:''}
+          <div class="pricing-plan-name" style="color:${p.color}">${p.name}</div>
+          <div style="display:flex;align-items:baseline;gap:3px;margin-bottom:4px;"><span class="pricing-amount">${p.price}</span><span class="pricing-period">${p.period}</span></div>
+          <p class="pricing-desc">${p.desc}</p>
+          <div class="pricing-divider"></div>
+          <div class="pricing-features">
+            ${p.features.map(f=>`<div class="pricing-feat"><i class="ti ti-check" style="color:var(--green);font-size:13px;"></i>${f}</div>`).join('')}
+            ${p.limitations.map(f=>`<div class="pricing-feat disabled"><i class="ti ti-x" style="color:var(--red);font-size:13px;"></i>${f}</div>`).join('')}
+          </div>
+          <button class="btn${p.id==='pro'?' btn-gold':''}" style="width:100%;justify-content:center;padding:9px;font-weight:600;font-size:12px;${isActive?'opacity:.6;cursor:default;':''}${p.id==='paid'&&!isActive?'border-color:rgba(91,143,212,.35);color:var(--blue);':''}" ${isActive?'disabled':''} ${btnAction}>${btnLabel}</button>
+        </div>`;
+      }).join('')}
+    </div>
+    <div style="text-align:center;margin-top:28px;font-size:12px;color:var(--text3);"><i class="ti ti-info-circle"></i> Upgrade requests are reviewed within 24 hours. You'll be notified by email once your plan is activated.</div>
+  `;
+}
+
+function openUpgradeModal(targetPlan) {
+  const modal = document.getElementById('upgrade-modal');
+  if(!modal) return;
+  modal.classList.add('show');
+  document.getElementById('upgrade-desired-plan').value = targetPlan;
+  const badge = document.getElementById('upgrade-modal-plan-badge');
+  if(badge) { badge.textContent = targetPlan==='pro'?'Pro Plan — R80/month':'Paid Plan — R55/month'; badge.style.color = targetPlan==='pro'?'var(--pink)':'var(--blue)'; }
+  // Pre-fill fields
+  const nameEl  = document.getElementById('upgrade-full-name');
+  const emailEl = document.getElementById('upgrade-email');
+  const compEl  = document.getElementById('upgrade-company');
+  if(nameEl  && !nameEl.value)  nameEl.value  = userProfile?.full_name    || '';
+  if(emailEl && !emailEl.value) emailEl.value = userProfile?.email        || currentUser?.email || '';
+  if(compEl  && !compEl.value)  compEl.value  = userProfile?.company_name || companyProfile?.name || '';
+}
+
+function closeUpgradeModal() {
+  const modal = document.getElementById('upgrade-modal');
+  if(modal) modal.classList.remove('show');
+}
+
+async function submitUpgradeRequest() {
+  const fullName = document.getElementById('upgrade-full-name').value.trim();
+  const email    = document.getElementById('upgrade-email').value.trim();
+  const company  = document.getElementById('upgrade-company').value.trim();
+  const phone    = document.getElementById('upgrade-phone').value.trim();
+  const plan     = document.getElementById('upgrade-desired-plan').value;
+  const notes    = document.getElementById('upgrade-notes').value.trim();
+  const btn = document.getElementById('upgrade-submit-btn');
+  if(!fullName||!email) { showToast('Full name and email are required','error'); return; }
+  btn.disabled=true; btn.textContent='Submitting…';
+  try {
+    const { error } = await sb.from('upgrade_requests').insert({
+      full_name:fullName, email, company_name:company||null, phone_number:phone||null,
+      requested_plan:plan, notes:notes||null, status:'pending',
+      user_id:currentUser.id, submitted_at:new Date().toISOString()
+    });
+    if(error) throw error;
+    closeUpgradeModal();
+    showToast('Upgrade request submitted! Our team will review and activate your plan.','success');
+    ['upgrade-full-name','upgrade-email','upgrade-company','upgrade-phone','upgrade-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  } catch(err) {
+    showToast('Failed to submit: '+err.message,'error');
+  } finally {
+    btn.disabled=false; btn.innerHTML='<i class="ti ti-send"></i> Submit Upgrade Request';
+  }
+}
+
+async function renderAdminPanel() {
+  const container = document.getElementById('admin-requests-container');
+  if(!container) return;
+  if(currentUser?.email !== ADMIN_EMAIL) {
+    container.innerHTML=`<div style="text-align:center;padding:40px;color:var(--text3)"><i class="ti ti-lock" style="font-size:32px;display:block;margin-bottom:8px"></i>Access denied. Admin only.</div>`;
+    return;
+  }
+  container.innerHTML=`<div style="text-align:center;padding:24px;color:var(--text3)"><div style="width:20px;height:20px;border:2px solid var(--border2);border-top-color:var(--pink);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;margin-right:8px;"></div>Loading requests…</div>`;
+  try {
+    const { data, error } = await sb.from('upgrade_requests').select('*').order('submitted_at',{ascending:false});
+    if(error) throw error;
+    const filterVal = document.getElementById('admin-filter')?.value || 'all';
+    const filtered  = filterVal==='all' ? (data||[]) : (data||[]).filter(r=>r.status===filterVal);
+    if(!filtered.length) {
+      container.innerHTML=`<div style="text-align:center;padding:40px;color:var(--text3)"><i class="ti ti-inbox" style="font-size:32px;display:block;margin-bottom:8px"></i>No ${filterVal==='all'?'':filterVal+' '}upgrade requests found.</div>`;
+      return;
+    }
+    const pendingCount  = (data||[]).filter(r=>r.status==='pending').length;
+    const approvedCount = (data||[]).filter(r=>r.status==='approved').length;
+    container.innerHTML=`
+      <div class="admin-stats-bar">
+        <div style="font-size:12px;color:var(--text2);"><span style="font-weight:600;color:var(--text)">${(data||[]).length}</span> Total</div>
+        <div style="font-size:12px;color:var(--text2);"><span style="font-weight:600;color:var(--orange)">${pendingCount}</span> Pending</div>
+        <div style="font-size:12px;color:var(--text2);"><span style="font-weight:600;color:var(--green)">${approvedCount}</span> Approved</div>
+      </div>
+      <div class="doc-table-scroll"><table class="doc-table"><thead><tr><th>Name</th><th>Email</th><th>Company</th><th>Plan</th><th>Phone</th><th>Submitted</th><th>Status</th><th>Actions</th></tr></thead><tbody>${filtered.map(r=>`
+        <tr>
+          <td style="font-weight:600;color:var(--text)">${r.full_name}</td>
+          <td><a href="mailto:${r.email}" style="color:var(--blue);text-decoration:none;">${r.email}</a></td>
+          <td>${r.company_name||'—'}</td>
+          <td><span class="badge ${r.requested_plan==='pro'?'badge-amber':'badge-blue'}">${r.requested_plan.toUpperCase()}</span></td>
+          <td style="color:var(--text3);font-size:11px;">${r.phone_number||'—'}</td>
+          <td style="font-size:11px;color:var(--text3)">${formatDateString((r.submitted_at||'').substring(0,10))}</td>
+          <td><span class="badge ${r.status==='approved'?'badge-green':r.status==='rejected'?'badge-red':'badge-gray'}">${r.status.toUpperCase()}</span></td>
+          <td>${r.status==='pending'?`<div style="display:flex;gap:5px;"><button class="btn" style="font-size:11px;padding:3px 8px;color:var(--green);border-color:rgba(74,191,168,.25)" onclick="approveUpgradeRequest('${r.id}','${r.user_id}','${r.requested_plan}')"><i class="ti ti-check"></i> Approve</button><button class="btn btn-red" style="font-size:11px;padding:3px 8px;" onclick="rejectUpgradeRequest('${r.id}')"><i class="ti ti-x"></i></button></div>`:'—'}</td>
+        </tr>`).join('')}</tbody></table></div>`;
+  } catch(err) {
+    container.innerHTML=`<div style="color:var(--red);padding:16px;font-size:13px;">Error: ${err.message}</div>`;
+  }
+}
+
+async function approveUpgradeRequest(requestId, userId, plan) {
+  if(!confirm(`Approve upgrade to ${plan.toUpperCase()} plan? This will immediately update the user's subscription.`)) return;
+  try {
+    const { error:reqErr } = await sb.from('upgrade_requests').update({status:'approved'}).eq('id',requestId);
+    if(reqErr) throw reqErr;
+    const { error:profileErr } = await sb.from('user_profiles').update({plan_type:plan,subscription_status:'active'}).eq('id',userId);
+    if(profileErr) throw profileErr;
+    showToast(`Plan upgraded to ${plan.toUpperCase()} successfully. User will see changes on next login.`,'success');
+    renderAdminPanel();
+  } catch(err) { showToast('Failed to approve: '+err.message,'error'); }
+}
+
+async function rejectUpgradeRequest(requestId) {
+  if(!confirm('Reject this upgrade request?')) return;
+  try {
+    const { error } = await sb.from('upgrade_requests').update({status:'rejected'}).eq('id',requestId);
+    if(error) throw error;
+    showToast('Request rejected.','info');
+    renderAdminPanel();
+  } catch(err) { showToast('Failed to reject: '+err.message,'error'); }
+}
 
 // ══════════════════════════════════════════
 //  BOOT — AUTH STATE LISTENER
@@ -1929,6 +2450,9 @@ async function bootstrapApp() {
   showScreen('loading');
   try {
     await loadCompanyProfile();
+    await loadUserProfile();
+    await loadPlanConfig();
+    await checkAndResetDocCount();
     if(!companyId) {
       showScreen('onboarding');
     } else {
@@ -2277,6 +2801,12 @@ function initApp() {
   renderNotificationsList();
   renderTopClients();
   updateStatusBar();
+  updateSidebarPlanBadge();
+  updateAdminNavVisibility();
+  applyDashboardGating();
+  applyAnalyticsGating();
+  // Free plan users land on Invoices (dashboard is gated)
+  if(userProfile?.plan_type === 'free') setTab('invoices');
 }
 
 function updateSidebarBranding() {
@@ -2326,7 +2856,7 @@ function setTab(tab) {
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
   const navItem = document.getElementById('nav-' + tab);
   if(navItem) navItem.classList.add('active');
-  const titles = { dashboard:'Executive Dashboard', analytics:'Analytics & Financial Reports', notifications:'Billing & System Notifications', invoices:'Invoices Listing', quotes:'Quotations Listing', po:'Purchase Orders', other:'All Documents', customers:'Customers CRM', suppliers:'Suppliers Management', templates:'A4 Layout Templates', settings:'Company Profile', 'document-editor':'Document Creator', 'document-preview':'A4 Document Preview' };
+  const titles = { dashboard:'Executive Dashboard', analytics:'Analytics & Financial Reports', notifications:'Billing & System Notifications', invoices:'Invoices Listing', quotes:'Quotations Listing', po:'Purchase Orders', other:'All Documents', customers:'Customers CRM', suppliers:'Suppliers Management', templates:'A4 Layout Templates', settings:'Company Profile', pricing:'Subscription & Pricing', admin:'Admin — Upgrade Requests', 'document-editor':'Document Creator', 'document-preview':'A4 Document Preview' };
   document.getElementById('topbar-title').textContent = titles[tab] || 'DocuFlow Pro';
   document.querySelectorAll('.tab-view').forEach(el => el.classList.remove('show'));
   const view = document.getElementById('view-' + tab);
@@ -2340,7 +2870,10 @@ function setTab(tab) {
   else if(tab==='suppliers') renderContactsGrid('supplier','suppliers-grid');
   else if(tab==='settings') fillSettingsForm();
   else if(tab==='templates') renderTemplateBuilder();
-  else if(tab==='analytics') updateAnalyticsCharts('6M');
+  else if(tab==='dashboard') { applyDashboardGating(); if(userProfile?.plan_type!=='free'){recalculateDashboardKPIs();drawRevChart();drawDonut();renderDocs();renderActivity();renderTopClients();} }
+  else if(tab==='analytics') { applyAnalyticsGating(); if(userProfile?.plan_type!=='free') updateAnalyticsCharts('6M'); }
+  else if(tab==='pricing') renderPricingPage();
+  else if(tab==='admin') renderAdminPanel();
 }
 
 // ══════════════════════════════════════════
@@ -2591,6 +3124,11 @@ let editingSupabaseId = null;
 let editorItems = [];
 
 function openNewDocEditor(defaultType='INV') {
+  // Check document generation limit before opening editor
+  if(!canGenerateDocument()) {
+    showDocLimitModal();
+    return;
+  }
   editingDocId = null; editingSupabaseId = null;
   editorItems = [{desc:'',qty:1,uom:'item',price:0,taxRate:15}];
   document.getElementById('editor-title').textContent = 'Create New Document';
@@ -2706,6 +3244,7 @@ async function saveEditedDocument() {
       }).select().single();
       if(error) throw error;
       activity.unshift({color:type==='INV'?'var(--pink)':type==='QT'?'var(--blue)':'var(--green)',text:`New ${type} ${num} generated for ${client}`,time:'Just now'});
+      await incrementDocumentCount();
       showToast(`Document ${num} saved to cloud`, 'success');
     }
     await loadDocuments();

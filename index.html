@@ -1577,7 +1577,10 @@ svg.chart{width:100%;height:100%;overflow:visible;}
           <input type="email" class="auth-input" id="si-email" placeholder="your@email.com" autocomplete="email">
         </div>
         <div class="auth-field" style="margin-top:12px;">
-          <label class="auth-label">Password</label>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;">
+            <label class="auth-label">Password</label>
+            <button type="button" onclick="openForgotPasswordModal()" style="background:none;border:none;cursor:pointer;font-size:11px;color:var(--text3);font-family:'DM Sans',sans-serif;padding:0;transition:color 0.2s;" onmouseover="this.style.color='var(--pink)'" onmouseout="this.style.color='var(--text3)'">Forgot password?</button>
+          </div>
           <input type="password" class="auth-input" id="si-password" placeholder="••••••••" autocomplete="current-password">
         </div>
         <div class="auth-error" id="si-error" style="margin-top:10px;"></div>
@@ -2167,24 +2170,80 @@ svg.chart{width:100%;height:100%;overflow:visible;}
   </div>
 </div>
 
-<!-- UPGRADE REQUEST MODAL -->
-<div class="modal-overlay" id="upgrade-modal" onclick="if(event.target===this)closeUpgradeModal()">
-  <div class="modal" style="width:520px;max-width:96vw;">
-    <div class="modal-title">Request Plan Upgrade</div>
-    <div style="font-size:13px;color:var(--text2);margin:-4px 0 18px;">
-      <span id="upgrade-modal-plan-badge" style="font-weight:600;color:var(--pink)">Paid Plan — R55/month</span>
-      <span> — Fill in your details and our team will activate your upgrade shortly.</span>
+<!-- IKHOKHA PAYMENT MODAL -->
+<div class="modal-overlay" id="ikhokha-modal" style="display:none;align-items:center;justify-content:center;" onclick="if(event.target===this)closeIkhokkhaModal()">
+  <div class="modal-box" style="max-width:480px;width:100%;padding:36px;">
+
+    <!-- Step 1: Overview + Pay button -->
+    <div id="ikhokha-step-1">
+      <div style="text-align:center;margin-bottom:24px;">
+        <div style="width:52px;height:52px;background:rgba(255,182,193,0.08);border:1px solid rgba(255,182,193,0.2);border-radius:16px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:14px;">
+          <i class="ti ti-credit-card" style="font-size:24px;color:var(--pink);"></i>
+        </div>
+        <div style="font-family:'DM Serif Display',serif;font-size:20px;color:var(--pink3);margin-bottom:4px;">Upgrade to <span id="ik-plan-name">Paid Plan</span></div>
+        <div style="font-size:13px;color:var(--text3);"><span id="ik-plan-price">R55/month</span> · Recurring via iKhokha</div>
+      </div>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:20px;">
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.4px;color:var(--text3);margin-bottom:10px;">How it works</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;align-items:flex-start;gap:10px;">
+            <div style="width:22px;height:22px;border-radius:50%;background:rgba(255,182,193,0.12);border:1px solid rgba(255,182,193,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;font-weight:700;color:var(--pink);">1</div>
+            <div style="font-size:12px;color:var(--text2);line-height:1.5;">Click <strong style="color:var(--text);">Pay with iKhokha</strong> — you'll be taken to the secure iKhokha payment page in a new tab.</div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:10px;">
+            <div style="width:22px;height:22px;border-radius:50%;background:rgba(255,182,193,0.12);border:1px solid rgba(255,182,193,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;font-weight:700;color:var(--pink);">2</div>
+            <div style="font-size:12px;color:var(--text2);line-height:1.5;">Complete your recurring payment on iKhokha using your card or bank details.</div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:10px;">
+            <div style="width:22px;height:22px;border-radius:50%;background:rgba(255,182,193,0.12);border:1px solid rgba(255,182,193,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;font-weight:700;color:var(--pink);">3</div>
+            <div style="font-size:12px;color:var(--text2);line-height:1.5;">Return here and click <strong style="color:var(--text);">I've Completed Payment</strong> — we'll verify and activate your plan within 24 hours.</div>
+          </div>
+        </div>
+      </div>
+      <button id="ik-pay-btn" onclick="ikhokkhaOpenPayment()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:10px;border:1px solid rgba(255,182,193,.4);background:rgba(255,182,193,0.06);color:var(--pink);font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;margin-bottom:10px;letter-spacing:0.2px;" onmouseover="this.style.background='rgba(255,182,193,0.12)'" onmouseout="this.style.background='rgba(255,182,193,0.06)'">
+        <i class="ti ti-external-link"></i> Pay with iKhokha
+      </button>
+      <button onclick="closeIkhokkhaModal()" style="width:100%;background:none;border:none;color:var(--text3);font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;padding:6px;transition:color 0.2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text3)'">Cancel</button>
     </div>
-    <input type="hidden" id="upgrade-desired-plan" value="paid">
-    <div class="form-row"><div class="form-label">Full Name</div><input type="text" class="form-input" id="upgrade-full-name" placeholder="Your full name"></div>
-    <div class="form-row"><div class="form-label">Email Address</div><input type="email" class="form-input" id="upgrade-email" placeholder="you@company.com"></div>
-    <div class="form-row"><div class="form-label">Company Name <span style="font-weight:400;text-transform:none;font-size:10px;">(optional)</span></div><input type="text" class="form-input" id="upgrade-company" placeholder="Your company name"></div>
-    <div class="form-row"><div class="form-label">Phone Number <span style="font-weight:400;text-transform:none;font-size:10px;">(optional)</span></div><input type="tel" class="form-input" id="upgrade-phone" placeholder="+27 11 555 1234"></div>
-    <div class="form-row"><div class="form-label">Additional Notes <span style="font-weight:400;text-transform:none;font-size:10px;">(optional)</span></div><textarea class="form-textarea" rows="2" id="upgrade-notes" placeholder="Any additional information…"></textarea></div>
-    <div class="modal-actions">
-      <button class="btn" onclick="closeUpgradeModal()">Cancel</button>
-      <button class="btn btn-gold" id="upgrade-submit-btn" onclick="submitUpgradeRequest()"><i class="ti ti-send"></i> Submit Upgrade Request</button>
+
+    <!-- Step 2: Confirm payment details -->
+    <div id="ikhokha-step-2" style="display:none;">
+      <div style="text-align:center;margin-bottom:22px;">
+        <div style="width:52px;height:52px;background:rgba(74,191,168,0.08);border:1px solid rgba(74,191,168,0.25);border-radius:16px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:14px;">
+          <i class="ti ti-circle-check" style="font-size:24px;color:var(--green);"></i>
+        </div>
+        <div style="font-family:'DM Serif Display',serif;font-size:19px;color:var(--pink3);margin-bottom:6px;">Payment Complete?</div>
+        <p style="font-size:12px;color:var(--text2);line-height:1.55;">Once you've finished on iKhokha, confirm your details below and we'll activate your plan after verifying your payment.</p>
+      </div>
+      <div style="margin-bottom:12px;">
+        <label style="font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:0.45px;display:block;margin-bottom:5px;">Full Name</label>
+        <input type="text" id="ik-full-name" class="auth-input" placeholder="Your full name" style="width:100%;">
+      </div>
+      <div style="margin-bottom:12px;">
+        <label style="font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:0.45px;display:block;margin-bottom:5px;">Email Address</label>
+        <input type="email" id="ik-email" class="auth-input" placeholder="you@company.com" style="width:100%;">
+      </div>
+      <div style="margin-bottom:16px;">
+        <label style="font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:0.45px;display:block;margin-bottom:5px;">iKhokha Reference / Transaction ID <span style="font-weight:400;text-transform:none;font-size:10px;">(optional)</span></label>
+        <input type="text" id="ik-payment-ref" class="auth-input" placeholder="e.g. TXN-XXXXXXX (from your iKhokha email)" style="width:100%;">
+      </div>
+      <div id="ik-error" style="font-size:12px;color:var(--red);padding:8px 12px;background:rgba(232,87,74,0.08);border:1px solid rgba(232,87,74,0.2);border-radius:8px;display:none;margin-bottom:12px;"></div>
+      <button id="ik-confirm-btn" onclick="ikhokkhaConfirmPayment()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:7px;padding:11px;border-radius:9px;border:1px solid rgba(74,191,168,.35);background:rgba(74,191,168,0.06);color:var(--green);font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;margin-bottom:10px;" onmouseover="this.style.background='rgba(74,191,168,0.12)'" onmouseout="this.style.background='rgba(74,191,168,0.06)'">
+        <i class="ti ti-check"></i> Confirm & Notify Admin
+      </button>
+      <button onclick="ikhokkhaOpenPayment()" style="width:100%;background:none;border:none;color:var(--text3);font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;padding:6px;transition:color 0.2s;" onmouseover="this.style.color='var(--pink)'" onmouseout="this.style.color='var(--text3)'"><i class="ti ti-external-link" style="font-size:11px;"></i> Re-open iKhokha Payment Page</button>
     </div>
+
+    <!-- Step 3: Success -->
+    <div id="ikhokha-step-3" style="display:none;text-align:center;padding:10px 0;">
+      <div style="width:64px;height:64px;background:rgba(74,191,168,0.1);border:1px solid rgba(74,191,168,0.25);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin-bottom:18px;">
+        <i class="ti ti-rocket" style="font-size:28px;color:var(--green);"></i>
+      </div>
+      <div style="font-family:'DM Serif Display',serif;font-size:21px;color:var(--green);margin-bottom:10px;">You're All Set!</div>
+      <p style="font-size:13px;color:var(--text2);line-height:1.65;margin-bottom:20px;">Your payment notification has been sent to the Speco Group team. Your plan will be activated within <strong style="color:var(--text);">24 hours</strong> once payment is verified via iKhokha.<br><br>You'll see the change reflected here on your next sign-in.</p>
+      <button onclick="closeIkhokkhaModal()" style="background:none;border:1px solid var(--border2);color:var(--text2);padding:9px 24px;border-radius:8px;cursor:pointer;font-size:13px;font-family:'DM Sans',sans-serif;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--green)';this.style.color='var(--green)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text2)'">Close</button>
+    </div>
+
   </div>
 </div>
 
@@ -2200,6 +2259,38 @@ svg.chart{width:100%;height:100%;overflow:visible;}
     </div>
     </div>
     <button class="btn" style="margin-top:14px;width:100%;opacity:.65;" onclick="document.getElementById('doc-limit-modal').classList.remove('show')">Maybe Later</button>
+  </div>
+</div>
+
+<!-- FORGOT PASSWORD MODAL (triggered from sign-in form) -->
+<div class="modal-overlay" id="forgot-pw-modal" style="display:none;align-items:center;justify-content:center;" onclick="if(event.target===this)closeForgotPasswordModal()">
+  <div class="modal-box" style="max-width:400px;width:100%;padding:32px;">
+    <div style="text-align:center;margin-bottom:22px;">
+      <div style="width:48px;height:48px;background:rgba(255,182,193,0.08);border:1px solid rgba(255,182,193,0.2);border-radius:14px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:14px;">
+        <i class="ti ti-lock-open" style="font-size:22px;color:var(--pink);"></i>
+      </div>
+      <div style="font-family:'DM Serif Display',serif;font-size:19px;color:var(--pink3);margin-bottom:6px;">Reset Your Password</div>
+      <p style="font-size:12px;color:var(--text2);line-height:1.55;">Enter your registered email address and we'll send you a secure link to reset your password.</p>
+    </div>
+    <div id="forgot-pw-sent" style="display:none;text-align:center;padding:10px 0;">
+      <div style="width:48px;height:48px;background:rgba(74,191,168,0.1);border:1px solid rgba(74,191,168,0.25);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin-bottom:14px;">
+        <i class="ti ti-mail-check" style="font-size:22px;color:var(--green);"></i>
+      </div>
+      <div style="font-size:15px;font-weight:600;color:var(--green);margin-bottom:8px;">Check Your Inbox</div>
+      <p style="font-size:12px;color:var(--text2);line-height:1.6;">A password reset link has been sent to <strong id="forgot-pw-sent-email" style="color:var(--text);"></strong>.<br>Follow the link in the email to set a new password.</p>
+      <button onclick="closeForgotPasswordModal()" style="margin-top:18px;background:none;border:1px solid var(--border2);color:var(--text2);padding:8px 20px;border-radius:8px;cursor:pointer;font-size:12px;font-family:'DM Sans',sans-serif;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--pink)';this.style.color='var(--pink)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text2)'">Close</button>
+    </div>
+    <div id="forgot-pw-form">
+      <div style="margin-bottom:14px;">
+        <label style="font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:0.45px;display:block;margin-bottom:5px;">Email Address</label>
+        <input type="email" id="forgot-pw-email" class="auth-input" placeholder="your@email.com" autocomplete="email" onkeydown="if(event.key==='Enter')handleForgotPassword()" style="width:100%;">
+      </div>
+      <div id="forgot-pw-error" style="font-size:12px;color:var(--red);padding:8px 12px;background:rgba(232,87,74,0.08);border:1px solid rgba(232,87,74,0.2);border-radius:8px;display:none;margin-bottom:12px;"></div>
+      <button id="forgot-pw-btn" onclick="handleForgotPassword()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:7px;background:linear-gradient(135deg,rgba(255,182,193,0.14),rgba(255,224,225,0.07));border:1px solid rgba(255,182,193,0.32);color:var(--pink3);padding:11px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;" onmouseover="this.style.background='linear-gradient(135deg,rgba(255,182,193,0.22),rgba(255,224,225,0.14))'" onmouseout="this.style.background='linear-gradient(135deg,rgba(255,182,193,0.14),rgba(255,224,225,0.07))'">
+        <i class="ti ti-send"></i> Send Reset Link
+      </button>
+      <button onclick="closeForgotPasswordModal()" style="width:100%;margin-top:10px;background:none;border:none;color:var(--text3);font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;padding:6px;transition:color 0.2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text3)'">Cancel</button>
+    </div>
   </div>
 </div>
 
@@ -2356,7 +2447,6 @@ function applyAnalyticsGating() {
 function renderSubscriptionWidget() {
   const widget = document.getElementById('subscription-widget');
   if(!widget || !userProfile || !planConfig) return;
-  if(userProfile.plan_type === 'free') { widget.style.display = 'none'; return; }
   const planColors = { free:'var(--text3)', paid:'var(--blue)', pro:'var(--pink)' };
   const planIcons  = { free:'ti-user', paid:'ti-crown', pro:'ti-rocket' };
   const color  = planColors[userProfile.plan_type] || 'var(--text3)';
@@ -2413,6 +2503,11 @@ function updateAdminNavVisibility() {
   if(adminNav) adminNav.style.display = (currentUser?.email === ADMIN_EMAIL) ? 'flex' : 'none';
 }
 
+const IKHOKHA_LINKS = {
+  paid: 'https://pay.ikhokha.com/speco-group/mpr/docuflowpaid',
+  pro:  'https://pay.ikhokha.com/speco-group/mpr/docuflowpro'
+};
+
 function renderPricingPage() {
   const container = document.getElementById('pricing-page-content');
   if(!container) return;
@@ -2432,14 +2527,27 @@ function renderPricingPage() {
       limitations:[] }
   ];
   container.innerHTML = `
-    <div style="text-align:center;margin-bottom:32px;">
-      <p style="font-size:13px;color:var(--text2);max-width:480px;margin:0 auto;line-height:1.55;">Upgrade requests are manually processed by the Speco Group team. You'll receive confirmation once your plan is activated.</p>
+    <div style="text-align:center;margin-bottom:28px;">
+      <div style="display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:20px;background:rgba(255,182,193,0.06);border:1px solid rgba(255,182,193,0.15);margin-bottom:12px;">
+        <i class="ti ti-shield-check" style="color:var(--pink);font-size:13px;"></i>
+        <span style="font-size:11px;color:var(--pink3);font-weight:600;letter-spacing:0.3px;">Payments Secured by iKhokha &middot; Monthly Recurring</span>
+      </div>
+      <p style="font-size:12px;color:var(--text2);max-width:500px;margin:0 auto;line-height:1.6;">Click <strong style="color:var(--text);">Pay with iKhokha</strong> to set up your secure monthly recurring payment. Once payment is confirmed, notify us and your plan will be activated within 24 hours.</p>
     </div>
     <div class="pricing-grid">
       ${plans.map(p=>{
         const isActive = currentPlan===p.id;
-        const btnLabel = isActive ? '<i class="ti ti-check"></i> Current Plan' : (p.id==='free'&&!isActive ? 'Downgrade' : 'Request Upgrade');
-        const btnAction = isActive||p.id==='free' ? '' : `onclick="openUpgradeModal('${p.id}')"`;
+        let btn = '';
+        if(isActive) {
+          btn = `<button class="btn" style="width:100%;justify-content:center;padding:9px;font-weight:600;font-size:12px;opacity:.6;cursor:default;" disabled><i class="ti ti-check"></i> Current Plan</button>`;
+        } else if(p.id === 'free') {
+          btn = `<button class="btn" style="width:100%;justify-content:center;padding:9px;font-weight:600;font-size:12px;opacity:.5;cursor:default;" disabled>Downgrade</button>`;
+        } else {
+          const ikColor  = p.id==='pro' ? 'var(--pink)'            : 'var(--blue)';
+          const ikBorder = p.id==='pro' ? 'rgba(255,182,193,.35)'  : 'rgba(91,143,212,.35)';
+          const ikHover  = p.id==='pro' ? 'rgba(255,182,193,0.12)' : 'rgba(91,143,212,0.12)';
+          btn = `<button onclick="openIkhokkhaModal('${p.id}')" style="width:100%;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px;border-radius:9px;border:1px solid ${ikBorder};background:rgba(255,255,255,0.03);color:${ikColor};font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;" onmouseover="this.style.background='${ikHover}'" onmouseout="this.style.background='rgba(255,255,255,0.03)'"><i class="ti ti-credit-card"></i> Pay with iKhokha &mdash; ${p.price}/month</button>`;
+        }
         return `<div class="pricing-card${isActive?' active-plan':''}${p.id==='pro'?' featured':''}" style="border-color:${isActive?p.color:'var(--border)'}">
           ${p.badge?`<div class="pricing-badge" style="background:${p.id==='paid'?'rgba(91,143,212,0.12)':'rgba(255,182,193,0.1)'};color:${p.color};border:1px solid ${p.color}33;">${p.badge}</div>`:''}
           <div class="pricing-plan-name" style="color:${p.color}">${p.name}</div>
@@ -2450,59 +2558,94 @@ function renderPricingPage() {
             ${p.features.map(f=>`<div class="pricing-feat"><i class="ti ti-check" style="color:var(--green);font-size:13px;"></i>${f}</div>`).join('')}
             ${p.limitations.map(f=>`<div class="pricing-feat disabled"><i class="ti ti-x" style="color:var(--red);font-size:13px;"></i>${f}</div>`).join('')}
           </div>
-          <button class="btn${p.id==='pro'?' btn-gold':''}" style="width:100%;justify-content:center;padding:9px;font-weight:600;font-size:12px;${isActive?'opacity:.6;cursor:default;':''}${p.id==='paid'&&!isActive?'border-color:rgba(91,143,212,.35);color:var(--blue);':''}" ${isActive?'disabled':''} ${btnAction}>${btnLabel}</button>
+          ${btn}
         </div>`;
       }).join('')}
     </div>
-    <div style="text-align:center;margin-top:28px;font-size:12px;color:var(--text3);"><i class="ti ti-info-circle"></i> Upgrade requests are reviewed within 24 hours. You'll be notified by email once your plan is activated.</div>
+    <div style="text-align:center;margin-top:24px;font-size:11px;color:var(--text3);"><i class="ti ti-shield-check" style="color:var(--green);"></i> All payments processed securely via iKhokha. DocuFlow Pro does not store your card details.</div>
   `;
 }
 
-function openUpgradeModal(targetPlan) {
-  const modal = document.getElementById('upgrade-modal');
+// Keep openUpgradeModal as alias for iKhokha flow (used by doc-limit modal buttons)
+function openUpgradeModal(targetPlan) { openIkhokkhaModal(targetPlan); }
+function closeUpgradeModal() { closeIkhokkhaModal(); }
+
+let _ikhokkhaPlan = 'paid';
+let _ikhokkhaWindowOpened = false;
+
+function openIkhokkhaModal(plan) {
+  _ikhokkhaPlan = plan;
+  _ikhokkhaWindowOpened = false;
+  const modal = document.getElementById('ikhokha-modal');
   if(!modal) return;
-  modal.classList.add('show');
-  document.getElementById('upgrade-desired-plan').value = targetPlan;
-  const badge = document.getElementById('upgrade-modal-plan-badge');
-  if(badge) { badge.textContent = targetPlan==='pro'?'Pro Plan — R80/month':'Paid Plan — R55/month'; badge.style.color = targetPlan==='pro'?'var(--pink)':'var(--blue)'; }
-  // Pre-fill fields
-  const nameEl  = document.getElementById('upgrade-full-name');
-  const emailEl = document.getElementById('upgrade-email');
-  const compEl  = document.getElementById('upgrade-company');
-  if(nameEl  && !nameEl.value)  nameEl.value  = userProfile?.full_name    || '';
-  if(emailEl && !emailEl.value) emailEl.value = userProfile?.email        || currentUser?.email || '';
-  if(compEl  && !compEl.value)  compEl.value  = userProfile?.company_name || companyProfile?.name || '';
+  // Reset to step 1
+  document.getElementById('ikhokha-step-1').style.display = 'block';
+  document.getElementById('ikhokha-step-2').style.display = 'none';
+  document.getElementById('ikhokha-step-3').style.display = 'none';
+  // Set plan details
+  const isPro   = plan === 'pro';
+  const color   = isPro ? 'var(--pink)' : 'var(--blue)';
+  const name    = isPro ? 'Pro Plan' : 'Paid Plan';
+  const price   = isPro ? 'R80' : 'R55';
+  document.getElementById('ik-plan-name').textContent  = name;
+  document.getElementById('ik-plan-price').textContent = price + '/month';
+  document.getElementById('ik-plan-name').style.color  = color;
+  document.getElementById('ik-pay-btn').style.borderColor = isPro ? 'rgba(255,182,193,.4)' : 'rgba(91,143,212,.4)';
+  document.getElementById('ik-pay-btn').style.color = color;
+  // Pre-fill name/email
+  const nameEl  = document.getElementById('ik-full-name');
+  const emailEl = document.getElementById('ik-email');
+  if(nameEl  && !nameEl.value)  nameEl.value  = userProfile?.full_name || '';
+  if(emailEl && !emailEl.value) emailEl.value = userProfile?.email || currentUser?.email || '';
+  modal.style.display = 'flex';
 }
 
-function closeUpgradeModal() {
-  const modal = document.getElementById('upgrade-modal');
-  if(modal) modal.classList.remove('show');
+function closeIkhokkhaModal() {
+  const modal = document.getElementById('ikhokha-modal');
+  if(modal) modal.style.display = 'none';
 }
 
-async function submitUpgradeRequest() {
-  const fullName = document.getElementById('upgrade-full-name').value.trim();
-  const email    = document.getElementById('upgrade-email').value.trim();
-  const company  = document.getElementById('upgrade-company').value.trim();
-  const phone    = document.getElementById('upgrade-phone').value.trim();
-  const plan     = document.getElementById('upgrade-desired-plan').value;
-  const notes    = document.getElementById('upgrade-notes').value.trim();
-  const btn = document.getElementById('upgrade-submit-btn');
-  if(!fullName||!email) { showToast('Full name and email are required','error'); return; }
-  btn.disabled=true; btn.textContent='Submitting…';
+function ikhokkhaOpenPayment() {
+  const link = IKHOKHA_LINKS[_ikhokkhaPlan];
+  window.open(link, '_blank', 'noopener,noreferrer');
+  _ikhokkhaWindowOpened = true;
+  // Move to step 2 after short delay
+  setTimeout(() => {
+    document.getElementById('ikhokha-step-1').style.display = 'none';
+    document.getElementById('ikhokha-step-2').style.display = 'block';
+  }, 800);
+}
+
+async function ikhokkhaConfirmPayment() {
+  const fullName = document.getElementById('ik-full-name').value.trim();
+  const email    = document.getElementById('ik-email').value.trim();
+  const ref      = document.getElementById('ik-payment-ref').value.trim();
+  const btn      = document.getElementById('ik-confirm-btn');
+  const errEl    = document.getElementById('ik-error');
+  errEl.style.display = 'none';
+  if(!fullName || !email) { errEl.textContent = 'Please fill in your name and email.'; errEl.style.display = 'block'; return; }
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader" style="animation:spin .8s linear infinite;display:inline-block;"></i> Submitting…';
   try {
     const { error } = await sb.from('upgrade_requests').insert({
-      full_name:fullName, email, company_name:company||null, phone_number:phone||null,
-      requested_plan:plan, notes:notes||null, status:'pending',
-      user_id:currentUser.id, submitted_at:new Date().toISOString()
+      full_name: fullName,
+      email,
+      company_name: userProfile?.company_name || companyProfile?.name || null,
+      phone_number: null,
+      requested_plan: _ikhokkhaPlan,
+      notes: ref ? `iKhokha Payment Reference: ${ref}` : 'iKhokha payment submitted — awaiting verification.',
+      status: 'payment_submitted',
+      user_id: currentUser.id,
+      submitted_at: new Date().toISOString()
     });
     if(error) throw error;
-    closeUpgradeModal();
-    showToast('Upgrade request submitted! Our team will review and activate your plan.','success');
-    ['upgrade-full-name','upgrade-email','upgrade-company','upgrade-phone','upgrade-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+    document.getElementById('ikhokha-step-2').style.display = 'none';
+    document.getElementById('ikhokha-step-3').style.display = 'block';
   } catch(err) {
-    showToast('Failed to submit: '+err.message,'error');
-  } finally {
-    btn.disabled=false; btn.innerHTML='<i class="ti ti-send"></i> Submit Upgrade Request';
+    errEl.textContent = err.message || 'Failed to submit. Please try again.';
+    errEl.style.display = 'block';
+    btn.disabled = false;
+    btn.innerHTML = '<i class="ti ti-check"></i> Confirm & Notify Admin';
   }
 }
 
@@ -2520,27 +2663,41 @@ async function renderAdminPanel() {
     const filterVal = document.getElementById('admin-filter')?.value || 'all';
     const filtered  = filterVal==='all' ? (data||[]) : (data||[]).filter(r=>r.status===filterVal);
     if(!filtered.length) {
-      container.innerHTML=`<div style="text-align:center;padding:40px;color:var(--text3)"><i class="ti ti-inbox" style="font-size:32px;display:block;margin-bottom:8px"></i>No ${filterVal==='all'?'':filterVal+' '}upgrade requests found.</div>`;
+      container.innerHTML=`<div style="text-align:center;padding:40px;color:var(--text3)"><i class="ti ti-inbox" style="font-size:32px;display:block;margin-bottom:8px"></i>No ${filterVal==='all'?'':filterVal+' '}requests found.</div>`;
       return;
     }
     const pendingCount  = (data||[]).filter(r=>r.status==='pending').length;
+    const paymentCount  = (data||[]).filter(r=>r.status==='payment_submitted').length;
     const approvedCount = (data||[]).filter(r=>r.status==='approved').length;
+    const statusBadge = (s) => {
+      const map = { approved:'badge-green', rejected:'badge-red', payment_submitted:'badge-amber', pending:'badge-gray' };
+      const label = s === 'payment_submitted' ? 'PAYMENT SENT' : s.toUpperCase();
+      return `<span class="badge ${map[s]||'badge-gray'}">${label}</span>`;
+    };
+    const actionsBtns = (r) => {
+      if(r.status === 'approved' || r.status === 'rejected') return '—';
+      const ikLink = IKHOKHA_LINKS[r.requested_plan] || '#';
+      const verifyBtn = `<a href="${ikLink}" target="_blank" rel="noopener" class="btn" style="font-size:11px;padding:3px 8px;color:var(--pink);border-color:rgba(255,182,193,.25);text-decoration:none;display:inline-flex;align-items:center;gap:4px;"><i class="ti ti-external-link"></i> iKhokha</a>`;
+      const approveBtn = `<button class="btn" style="font-size:11px;padding:3px 8px;color:var(--green);border-color:rgba(74,191,168,.25)" onclick="approveUpgradeRequest('${r.id}','${r.user_id}','${r.requested_plan}')"><i class="ti ti-check"></i> Activate</button>`;
+      const rejectBtn  = `<button class="btn btn-red" style="font-size:11px;padding:3px 8px;" onclick="rejectUpgradeRequest('${r.id}')"><i class="ti ti-x"></i></button>`;
+      return `<div style="display:flex;gap:5px;flex-wrap:wrap;">${verifyBtn}${approveBtn}${rejectBtn}</div>`;
+    };
     container.innerHTML=`
       <div class="admin-stats-bar">
         <div style="font-size:12px;color:var(--text2);"><span style="font-weight:600;color:var(--text)">${(data||[]).length}</span> Total</div>
         <div style="font-size:12px;color:var(--text2);"><span style="font-weight:600;color:var(--orange)">${pendingCount}</span> Pending</div>
-        <div style="font-size:12px;color:var(--text2);"><span style="font-weight:600;color:var(--green)">${approvedCount}</span> Approved</div>
+        <div style="font-size:12px;color:var(--text2);"><span style="font-weight:600;color:var(--pink)">${paymentCount}</span> Payment Sent</div>
+        <div style="font-size:12px;color:var(--text2);"><span style="font-weight:600;color:var(--green)">${approvedCount}</span> Activated</div>
       </div>
-      <div class="doc-table-scroll"><table class="doc-table"><thead><tr><th>Name</th><th>Email</th><th>Company</th><th>Plan</th><th>Phone</th><th>Submitted</th><th>Status</th><th>Actions</th></tr></thead><tbody>${filtered.map(r=>`
+      <div class="doc-table-scroll"><table class="doc-table"><thead><tr><th>Name</th><th>Email</th><th>Plan</th><th>Notes / Ref</th><th>Submitted</th><th>Status</th><th>Actions</th></tr></thead><tbody>${filtered.map(r=>`
         <tr>
           <td style="font-weight:600;color:var(--text)">${r.full_name}</td>
           <td><a href="mailto:${r.email}" style="color:var(--blue);text-decoration:none;">${r.email}</a></td>
-          <td>${r.company_name||'—'}</td>
           <td><span class="badge ${r.requested_plan==='pro'?'badge-amber':'badge-blue'}">${r.requested_plan.toUpperCase()}</span></td>
-          <td style="color:var(--text3);font-size:11px;">${r.phone_number||'—'}</td>
+          <td style="font-size:11px;color:var(--text2);max-width:180px;word-break:break-word;">${r.notes||'—'}</td>
           <td style="font-size:11px;color:var(--text3)">${formatDateString((r.submitted_at||'').substring(0,10))}</td>
-          <td><span class="badge ${r.status==='approved'?'badge-green':r.status==='rejected'?'badge-red':'badge-gray'}">${r.status.toUpperCase()}</span></td>
-          <td>${r.status==='pending'?`<div style="display:flex;gap:5px;"><button class="btn" style="font-size:11px;padding:3px 8px;color:var(--green);border-color:rgba(74,191,168,.25)" onclick="approveUpgradeRequest('${r.id}','${r.user_id}','${r.requested_plan}')"><i class="ti ti-check"></i> Approve</button><button class="btn btn-red" style="font-size:11px;padding:3px 8px;" onclick="rejectUpgradeRequest('${r.id}')"><i class="ti ti-x"></i></button></div>`:'—'}</td>
+          <td>${statusBadge(r.status)}</td>
+          <td>${actionsBtns(r)}</td>
         </tr>`).join('')}</tbody></table></div>`;
   } catch(err) {
     container.innerHTML=`<div style="color:var(--red);padding:16px;font-size:13px;">Error: ${err.message}</div>`;
@@ -2787,6 +2944,63 @@ function switchAuthTab(tab) {
   document.getElementById('form-signup').style.display = tab==='signup' ? 'block' : 'none';
   document.getElementById('tab-signin').classList.toggle('active', tab==='signin');
   document.getElementById('tab-signup').classList.toggle('active', tab==='signup');
+}
+
+function openForgotPasswordModal() {
+  const modal = document.getElementById('forgot-pw-modal');
+  if (!modal) return;
+  // Pre-fill email if user already typed it in the sign-in form
+  const existingEmail = document.getElementById('si-email')?.value.trim();
+  if (existingEmail) document.getElementById('forgot-pw-email').value = existingEmail;
+  document.getElementById('forgot-pw-error').style.display = 'none';
+  document.getElementById('forgot-pw-sent').style.display = 'none';
+  document.getElementById('forgot-pw-form').style.display = 'block';
+  modal.style.display = 'flex';
+  setTimeout(() => document.getElementById('forgot-pw-email')?.focus(), 100);
+}
+
+function closeForgotPasswordModal() {
+  const modal = document.getElementById('forgot-pw-modal');
+  if (modal) modal.style.display = 'none';
+}
+
+async function handleForgotPassword() {
+  const email = document.getElementById('forgot-pw-email').value.trim();
+  const errEl = document.getElementById('forgot-pw-error');
+  const btn   = document.getElementById('forgot-pw-btn');
+
+  errEl.style.display = 'none';
+  if (!email) {
+    errEl.textContent = 'Please enter your email address.';
+    errEl.style.display = 'block';
+    return;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    errEl.textContent = 'Please enter a valid email address.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader" style="animation:spin .8s linear infinite;display:inline-block;"></i> Sending…';
+
+  const { error } = await sb.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://docuflowpro.co.za/index.html'
+  });
+
+  btn.disabled = false;
+  btn.innerHTML = '<i class="ti ti-send"></i> Send Reset Link';
+
+  if (error) {
+    errEl.textContent = error.message || 'Failed to send reset email. Please try again.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  // Show success state
+  document.getElementById('forgot-pw-form').style.display = 'none';
+  document.getElementById('forgot-pw-sent-email').textContent = email;
+  document.getElementById('forgot-pw-sent').style.display = 'block';
 }
 
 async function handleSignIn() {

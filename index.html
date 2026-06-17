@@ -2076,7 +2076,27 @@ svg.chart{width:100%;height:100%;overflow:visible;}
       <button class="btn" id="doc-limit-upgrade-paid" style="border-color:rgba(91,143,212,.3);color:var(--blue)" onclick="document.getElementById('doc-limit-modal').classList.remove('show');openUpgradeModal('paid')"><i class="ti ti-crown"></i> Upgrade to Paid</button>
       <button class="btn btn-gold" id="doc-limit-upgrade-pro" onclick="document.getElementById('doc-limit-modal').classList.remove('show');openUpgradeModal('pro')"><i class="ti ti-rocket"></i> Upgrade to Pro</button>
     </div>
+    </div>
     <button class="btn" style="margin-top:14px;width:100%;opacity:.65;" onclick="document.getElementById('doc-limit-modal').classList.remove('show')">Maybe Later</button>
+  </div>
+</div>
+
+<!-- PASSWORD RESET MODAL (triggered by recovery email link) -->
+<div class="modal-overlay show" id="pw-reset-modal" style="display:none;">
+  <div class="modal" style="max-width:420px;text-align:center;">
+    <div style="width:56px;height:56px;background:rgba(255,182,193,0.08);border:1px solid rgba(255,182,193,0.2);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+      <i class="ti ti-lock-open" style="font-size:26px;color:var(--pink);"></i>
+    </div>
+    <div class="modal-title" style="font-size:18px;">Set New Password</div>
+    <p style="font-size:13px;color:var(--text2);margin:8px 0 20px;line-height:1.55;">Enter and confirm your new password below.</p>
+    <div id="pw-reset-error" style="font-size:12px;color:var(--red);padding:8px 12px;background:rgba(232,87,74,0.08);border:1px solid rgba(232,87,74,0.2);border-radius:8px;display:none;margin-bottom:14px;text-align:left;"></div>
+    <div class="form-row" style="text-align:left;"><div class="form-label">New Password</div><input type="password" class="form-input" id="pw-reset-new" placeholder="Minimum 8 characters" autocomplete="new-password"></div>
+    <div class="form-row" style="text-align:left;"><div class="form-label">Confirm Password</div><input type="password" class="form-input" id="pw-reset-confirm" placeholder="Re-enter your password" autocomplete="new-password"></div>
+    <div class="modal-actions" style="margin-top:6px;">
+      <button class="btn btn-gold" style="width:100%;justify-content:center;padding:11px;" id="pw-reset-btn" onclick="submitPasswordReset()">
+        <i class="ti ti-check"></i> Set New Password
+      </button>
+    </div>
   </div>
 </div>
 
@@ -2428,15 +2448,84 @@ async function rejectUpgradeRequest(requestId) {
 }
 
 // ══════════════════════════════════════════
+//  PASSWORD RESET (recovery email link)
+// ══════════════════════════════════════════
+function openPasswordResetModal() {
+  const modal = document.getElementById('pw-reset-modal');
+  if (!modal) return;
+  modal.style.display = 'flex';
+  setTimeout(() => { document.getElementById('pw-reset-new')?.focus(); }, 100);
+}
+
+async function submitPasswordReset() {
+  const newPw  = document.getElementById('pw-reset-new').value;
+  const confPw = document.getElementById('pw-reset-confirm').value;
+  const errEl  = document.getElementById('pw-reset-error');
+  const btn    = document.getElementById('pw-reset-btn');
+
+  errEl.style.display = 'none';
+  if (!newPw || newPw.length < 8) { errEl.textContent = 'Password must be at least 8 characters.'; errEl.style.display = 'block'; return; }
+  if (newPw !== confPw)           { errEl.textContent = 'Passwords do not match.'; errEl.style.display = 'block'; return; }
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader" style="animation:spin .8s linear infinite;display:inline-block;"></i> Saving…';
+
+  try {
+    const { error } = await sb.auth.updateUser({ password: newPw });
+    if (error) throw error;
+    // Success — hide modal, clear hash, let auth state resume
+    document.getElementById('pw-reset-modal').style.display = 'none';
+    history.replaceState(null, '', window.location.pathname);
+    showToast('Password updated successfully! Please sign in.', 'success');
+    await sb.auth.signOut();
+  } catch (err) {
+    errEl.textContent = err.message || 'Failed to update password. Please try again.';
+    errEl.style.display = 'block';
+    btn.disabled = false;
+    btn.innerHTML = '<i class="ti ti-check"></i> Set New Password';
+  }
+}
+
+// ══════════════════════════════════════════
 //  BOOT — AUTH STATE LISTENER
 // ══════════════════════════════════════════
 window.addEventListener('load', async () => {
+
+  // ── Intercept Supabase email-link tokens ──────────────────────────────────
+  // Supabase appends #access_token=...&type=invite (or type=recovery) to the
+  // redirect URL. If Site URL is still localhost these land on index.html
+  // instead of the intended page. We catch them here and re-route correctly.
+  const rawHash = window.location.hash;
+  if (rawHash) {
+    const hashParams = new URLSearchParams(rawHash.replace(/^#/, ''));
+    const tokenType  = hashParams.get('type');
+
+    // Invite link → send to register.html to complete account setup
+    if (tokenType === 'invite' || tokenType === 'signup') {
+      window.location.replace('/register.html' + rawHash);
+      return; // stop further execution on this page
+    }
+
+    // Password-reset link → show inline recovery modal (handled below)
+    if (tokenType === 'recovery') {
+      // Let the auth state change fire (Supabase sets the session from hash)
+      // then open the reset modal via the PASSWORD_RECOVERY event
+    }
+  }
+
   // Initialize sandbox demo once
   if (document.getElementById('landing-screen')) {
     updateSandboxDemo();
   }
+
   sb.auth.onAuthStateChange(async (event, session) => {
-    if(session && session.user) {
+    if (event === 'PASSWORD_RECOVERY') {
+      // User clicked the password-reset link — show reset modal immediately
+      showScreen('landing'); // make sure app chrome isn't visible
+      openPasswordResetModal();
+      return;
+    }
+    if (session && session.user) {
       currentUser = session.user;
       await bootstrapApp();
     } else {

@@ -2008,11 +2008,13 @@ svg.chart{width:100%;height:100%;overflow:visible;}
           <div class="card-header">
             <div><div class="card-title">Admin — Upgrade Requests</div><div class="card-sub">Review and approve subscription plan upgrades</div></div>
             <div style="display:flex;align-items:center;gap:8px;">
-              <select class="form-select" id="admin-filter" style="width:130px;" onchange="renderAdminPanel()">
-                <option value="all">All Requests</option>
-                <option value="pending">Pending</option>
-                <option value="approved">Approved</option>
-                <option value="rejected">Rejected</option>
+              <select class="form-select" id="admin-filter" style="width:170px;" onchange="renderAdminPanel()">
+                <option value="all">All Users & Requests</option>
+                <option value="pro">Pro Plan Users</option>
+                <option value="paid">Paid Plan Users</option>
+                <option value="pending">Pending Requests</option>
+                <option value="approved">Approved Requests</option>
+                <option value="rejected">Rejected Requests</option>
               </select>
               <button class="btn" onclick="renderAdminPanel()"><i class="ti ti-refresh"></i> Refresh</button>
             </div>
@@ -2634,7 +2636,7 @@ async function ikhokkhaConfirmPayment() {
       phone_number: null,
       requested_plan: _ikhokkhaPlan,
       notes: ref ? `iKhokha Payment Reference: ${ref}` : 'iKhokha payment submitted — awaiting verification.',
-      status: 'payment_submitted',
+      status: 'pending',
       user_id: currentUser.id,
       submitted_at: new Date().toISOString()
     });
@@ -2656,49 +2658,88 @@ async function renderAdminPanel() {
     container.innerHTML=`<div style="text-align:center;padding:40px;color:var(--text3)"><i class="ti ti-lock" style="font-size:32px;display:block;margin-bottom:8px"></i>Access denied. Admin only.</div>`;
     return;
   }
-  container.innerHTML=`<div style="text-align:center;padding:24px;color:var(--text3)"><div style="width:20px;height:20px;border:2px solid var(--border2);border-top-color:var(--pink);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;margin-right:8px;"></div>Loading requests…</div>`;
+  container.innerHTML=`<div style="text-align:center;padding:24px;color:var(--text3)"><div style="width:20px;height:20px;border:2px solid var(--border2);border-top-color:var(--pink);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;margin-right:8px;"></div>Loading data…</div>`;
   try {
-    const { data, error } = await sb.from('upgrade_requests').select('*').order('submitted_at',{ascending:false});
-    if(error) throw error;
+    const { data: usersData, error: usersErr } = await sb.from('user_profiles').select('*').order('created_at', {ascending:false});
+    if(usersErr) throw usersErr;
+    const { data: reqData, error: reqErr } = await sb.from('upgrade_requests').select('*').order('submitted_at',{ascending:false});
+    if(reqErr) throw reqErr;
+    
+    let list = (usersData || []).map(u => {
+      const uReqs = (reqData || []).filter(r => r.user_id === u.id);
+      const latest = uReqs[0] || null;
+      return {
+        user: u,
+        request: latest,
+        status: latest ? latest.status : 'none',
+        plan: u.plan_type || 'free'
+      };
+    });
+
     const filterVal = document.getElementById('admin-filter')?.value || 'all';
-    const filtered  = filterVal==='all' ? (data||[]) : (data||[]).filter(r=>r.status===filterVal);
+    const filtered = list.filter(item => {
+      if(filterVal === 'all') return true;
+      if(filterVal === 'pro') return item.plan === 'pro';
+      if(filterVal === 'paid') return item.plan === 'paid';
+      if(filterVal === 'pending') return item.status === 'pending';
+      if(filterVal === 'approved') return item.status === 'approved';
+      if(filterVal === 'rejected') return item.status === 'rejected';
+      return true;
+    });
+
     if(!filtered.length) {
-      container.innerHTML=`<div style="text-align:center;padding:40px;color:var(--text3)"><i class="ti ti-inbox" style="font-size:32px;display:block;margin-bottom:8px"></i>No ${filterVal==='all'?'':filterVal+' '}requests found.</div>`;
+      container.innerHTML=`<div style="text-align:center;padding:40px;color:var(--text3)"><i class="ti ti-users" style="font-size:32px;display:block;margin-bottom:8px"></i>No users found for this filter.</div>`;
       return;
     }
-    const pendingCount  = (data||[]).filter(r=>r.status==='pending').length;
-    const paymentCount  = (data||[]).filter(r=>r.status==='payment_submitted').length;
-    const approvedCount = (data||[]).filter(r=>r.status==='approved').length;
+    const pendingCount = list.filter(i=>i.status==='pending').length;
+    const proCount = list.filter(i=>i.plan==='pro').length;
+    const paidCount = list.filter(i=>i.plan==='paid').length;
+    const freeCount = list.filter(i=>i.plan==='free').length;
+
     const statusBadge = (s) => {
-      const map = { approved:'badge-green', rejected:'badge-red', payment_submitted:'badge-amber', pending:'badge-gray' };
+      if(!s || s==='none') return `<span style="font-size:11px;color:var(--text3)">—</span>`;
+      const map = { approved:'badge-green', rejected:'badge-red', payment_submitted:'badge-amber', pending:'badge-amber' };
       const label = s === 'payment_submitted' ? 'PAYMENT SENT' : s.toUpperCase();
       return `<span class="badge ${map[s]||'badge-gray'}">${label}</span>`;
     };
-    const actionsBtns = (r) => {
-      if(r.status === 'approved' || r.status === 'rejected') return '—';
+
+    const planBadge = (p) => {
+      const map = { pro: 'badge-amber', paid: 'badge-blue', free: 'badge-gray' };
+      return `<span class="badge ${map[p]||'badge-gray'}">${(p||'FREE').toUpperCase()}</span>`;
+    };
+
+    const actionsBtns = (item) => {
+      const r = item.request;
+      if(!r || r.status !== 'pending') return '—';
       const ikLink = IKHOKHA_LINKS[r.requested_plan] || '#';
-      const verifyBtn = `<a href="${ikLink}" target="_blank" rel="noopener" class="btn" style="font-size:11px;padding:3px 8px;color:var(--pink);border-color:rgba(255,182,193,.25);text-decoration:none;display:inline-flex;align-items:center;gap:4px;"><i class="ti ti-external-link"></i> iKhokha</a>`;
+      const verifyBtn = `<a href="${ikLink}" target="_blank" rel="noopener" class="btn" style="font-size:11px;padding:3px 8px;color:var(--pink);border-color:rgba(255,182,193,.25);text-decoration:none;display:inline-flex;align-items:center;gap:4px;"><i class="ti ti-external-link"></i> Verify</a>`;
       const approveBtn = `<button class="btn" style="font-size:11px;padding:3px 8px;color:var(--green);border-color:rgba(74,191,168,.25)" onclick="approveUpgradeRequest('${r.id}','${r.user_id}','${r.requested_plan}')"><i class="ti ti-check"></i> Activate</button>`;
       const rejectBtn  = `<button class="btn btn-red" style="font-size:11px;padding:3px 8px;" onclick="rejectUpgradeRequest('${r.id}')"><i class="ti ti-x"></i></button>`;
       return `<div style="display:flex;gap:5px;flex-wrap:wrap;">${verifyBtn}${approveBtn}${rejectBtn}</div>`;
     };
+
     container.innerHTML=`
       <div class="admin-stats-bar">
-        <div style="font-size:12px;color:var(--text2);"><span style="font-weight:600;color:var(--text)">${(data||[]).length}</span> Total</div>
-        <div style="font-size:12px;color:var(--text2);"><span style="font-weight:600;color:var(--orange)">${pendingCount}</span> Pending</div>
-        <div style="font-size:12px;color:var(--text2);"><span style="font-weight:600;color:var(--pink)">${paymentCount}</span> Payment Sent</div>
-        <div style="font-size:12px;color:var(--text2);"><span style="font-weight:600;color:var(--green)">${approvedCount}</span> Activated</div>
+        <div style="font-size:12px;color:var(--text2);"><span style="font-weight:600;color:var(--text)">${list.length}</span> Total Users</div>
+        <div style="font-size:12px;color:var(--text2);"><span style="font-weight:600;color:var(--orange)">${proCount}</span> Pro Plan</div>
+        <div style="font-size:12px;color:var(--text2);"><span style="font-weight:600;color:var(--blue)">${paidCount}</span> Paid Plan</div>
+        <div style="font-size:12px;color:var(--text2);"><span style="font-weight:600;color:var(--text3)">${freeCount}</span> Free Plan</div>
+        <div style="font-size:12px;color:var(--text2);"><span style="font-weight:600;color:var(--pink)">${pendingCount}</span> Pending Requests</div>
       </div>
-      <div class="doc-table-scroll"><table class="doc-table"><thead><tr><th>Name</th><th>Email</th><th>Plan</th><th>Notes / Ref</th><th>Submitted</th><th>Status</th><th>Actions</th></tr></thead><tbody>${filtered.map(r=>`
+      <div class="doc-table-scroll"><table class="doc-table"><thead><tr><th>Name</th><th>Email</th><th>Current Plan</th><th>Request Details</th><th>Request Status</th><th>Actions</th></tr></thead><tbody>${filtered.map(item=>{
+        const u = item.user;
+        const r = item.request;
+        const reqDetails = r ? `<div><strong>Requested:</strong> ${r.requested_plan.toUpperCase()}</div><div style="margin-top:2px;font-size:10px;">${r.notes||'—'}</div><div style="margin-top:2px;font-size:10px;color:var(--text3)">${formatDateString((r.submitted_at||'').substring(0,10))}</div>` : '—';
+        return `
         <tr>
-          <td style="font-weight:600;color:var(--text)">${r.full_name}</td>
-          <td><a href="mailto:${r.email}" style="color:var(--blue);text-decoration:none;">${r.email}</a></td>
-          <td><span class="badge ${r.requested_plan==='pro'?'badge-amber':'badge-blue'}">${r.requested_plan.toUpperCase()}</span></td>
-          <td style="font-size:11px;color:var(--text2);max-width:180px;word-break:break-word;">${r.notes||'—'}</td>
-          <td style="font-size:11px;color:var(--text3)">${formatDateString((r.submitted_at||'').substring(0,10))}</td>
-          <td>${statusBadge(r.status)}</td>
-          <td>${actionsBtns(r)}</td>
-        </tr>`).join('')}</tbody></table></div>`;
+          <td style="font-weight:600;color:var(--text)">${u.full_name}</td>
+          <td><a href="mailto:${u.email}" style="color:var(--blue);text-decoration:none;">${u.email}</a></td>
+          <td>${planBadge(item.plan)}</td>
+          <td style="font-size:11px;color:var(--text2);max-width:200px;word-break:break-word;">${reqDetails}</td>
+          <td>${statusBadge(item.status)}</td>
+          <td>${actionsBtns(item)}</td>
+        </tr>`;
+      }).join('')}</tbody></table></div>`;
   } catch(err) {
     container.innerHTML=`<div style="color:var(--red);padding:16px;font-size:13px;">Error: ${err.message}</div>`;
   }
